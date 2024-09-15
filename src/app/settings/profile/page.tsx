@@ -1,3 +1,5 @@
+"use server";
+
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

@@ -10,12 +10,12 @@ const Page = () => {
       <ListMenu>
         <ListMenuGroup title="Your contents">
           <ListMenuItem
-            title="Exercises"
+            heading="Exercises"
             iconName="Dumbbell"
             href="/contents/exercises"
           />
           <ListMenuItem
-            title="Locations"
+            heading="Locations"
             iconName="LandPlot"
             href="/contents/locations"
           />
