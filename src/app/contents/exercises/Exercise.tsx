@@ -47,7 +47,7 @@ const Exercise = ({ setExercises, exercise }: Props) => {
   return (
     <>
       <ListMenuItem
-        title={exercise.title}
+        heading={exercise.title}
         endContent={
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

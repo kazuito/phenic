@@ -30,14 +30,14 @@ export const ListMenuGroup = ({
 };
 
 type ListMenuItemProps = {
-  title?: React.ReactNode;
+  heading: React.ReactNode;
   iconName?: string;
   href?: string;
   endContent?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement>;
 
 export const ListMenuItem = ({
-  title,
+  heading,
   iconName,
   href,
   endContent,
@@ -47,7 +47,7 @@ export const ListMenuItem = ({
   const ItemContent = () => (
     <>
       {iconName && <Icon name={iconName} size={18} />}
-      {title}
+      {heading}
       {endContent && <div className="ml-auto">{endContent}</div>}
     </>
   );

@@ -68,7 +68,7 @@ const Location = ({ setLocations, location }: Props) => {
   return (
     <>
       <ListMenuItem
-        title={
+        heading={
           <>
             <div>{location.name}</div>
             {location.isDefault && <Badge>Default</Badge>}
