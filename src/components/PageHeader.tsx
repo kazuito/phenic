@@ -18,8 +18,9 @@ const PageHeader = ({
   return (
     <div className="flex items-center p-4 mx-4 sticky top-0 bg-white">
       {hideBack ? null : (
-        <Link href={backHref} className="absolute left-0">
-          ← {backText}
+        <Link href={backHref} className="group flex items-center gap-1 absolute left-0 text-blue-500">
+          <div className="">←</div>
+          <div>{backText}</div>
         </Link>
       )}
       <div className="mx-auto">{title}</div>

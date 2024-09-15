@@ -9,7 +9,7 @@ export function catSeries<T>(
   items: T[],
   catBy: keyof T | ((item: T) => string)
 ) {
-  let groups: T[][] = [];
+  const groups: T[][] = [];
   let group: T[] = [];
 
   items.forEach((item) => {

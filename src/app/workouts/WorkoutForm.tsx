@@ -13,7 +13,6 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectSeparator,
   SelectTrigger,
@@ -35,7 +34,7 @@ const WorkoutForm = () => {
       locationId: "",
       newLocationName: "",
     },
-    onSubmit: async ({ value, formApi }) => {
+    onSubmit: async ({ value }) => {
       const res = await client.api.workout.$post({
         json: {
           ...value,
@@ -129,7 +128,7 @@ const WorkoutForm = () => {
         )}
         <Field
           name="date"
-          children={({ state, handleChange, handleBlur }) => (
+          children={({ state, handleChange }) => (
             <Popover>
               <PopoverTrigger asChild>
                 <Button className="justify-start" variant="outline">

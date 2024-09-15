@@ -1,7 +1,6 @@
 "use client";
 
 import { FieldState, Updater, useForm } from "@tanstack/react-form";
-import Icon from "@/components/Icon";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -14,14 +13,12 @@ import {
 import { Input } from "@/components/ui/input";
 import client from "@/lib/hono";
 import { Textarea } from "@/components/ui/textarea";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { InferResponseType } from "hono";
-import { $Enums, ExerciseType, Prisma } from "@prisma/client";
-import { z } from "zod";
+import { ExerciseType, Prisma } from "@prisma/client";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { toast } from "sonner";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Stringifier } from "postcss";
 import ExtraSheet from "@/components/myui/extra-sheet";
 
 type Props = {
@@ -307,6 +304,7 @@ const WorkForm = (props: Props) => {
                 defaultValue={state.value}
                 value={state.value}
                 onValueChange={handleChange}
+                onBlur={handleBlur}
               >
                 <TabsList className="w-full">
                   <TabsTrigger className="grow" value="STRENGTH">
