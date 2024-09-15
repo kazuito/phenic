@@ -1,12 +1,13 @@
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { FieldState, Updater, useForm } from "@tanstack/react-form";
 import Icon from "@/components/Icon";
 import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -19,6 +20,9 @@ import { $Enums, ExerciseType, Prisma } from "@prisma/client";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { toast } from "sonner";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Stringifier } from "postcss";
+import ExtraSheet from "@/components/myui/extra-sheet";
 
 type Props = {
   setSets: Dispatch<
@@ -44,6 +48,8 @@ const WorkForm = (props: Props) => {
   const [exercises, setExercises] = useState<
     InferResponseType<typeof client.api.exercise.$get, 200>
   >([]);
+  const [selectedExerciseType, setSelectedExerciseType] =
+    useState<ExerciseType | null>(props.defaultValues?.exercise.type ?? null);
 
   const { Field, handleSubmit, useStore } = useForm({
     validatorAdapter: zodValidator(),
@@ -53,6 +59,8 @@ const WorkForm = (props: Props) => {
           weight: props.defaultValues.weight ?? 0.0,
           reps: props.defaultValues.reps ?? 0,
           memo: props.defaultValues.memo,
+          distance: props.defaultValues.distance ?? 0.0,
+          time: props.defaultValues.time ?? 0,
           newExerciseName: "",
           newExerciseType: "STRENGTH",
         }
@@ -60,6 +68,8 @@ const WorkForm = (props: Props) => {
           exerciseId: "",
           weight: 0.0,
           reps: 0,
+          distance: 0.0,
+          time: 0,
           memo: "",
           newExerciseName: "",
           newExerciseType: "STRENGTH",
@@ -72,8 +82,11 @@ const WorkForm = (props: Props) => {
           exerciseId: value.exerciseId,
           weight: value.weight,
           reps: value.reps,
+          distance: value.distance,
+          time: value.time,
           memo: value.memo,
           newExerciseName: value.newExerciseName,
+          newExerciseType: value.newExerciseType as ExerciseType,
           workoutId: props.workoutId,
           setId: props.defaultValues?.id,
         },
@@ -135,6 +148,106 @@ const WorkForm = (props: Props) => {
     fetchExercises();
   }, []);
 
+  type CustomNumberInputProps = {
+    state: FieldState<number>;
+    handleChange: (updater: Updater<number>) => void;
+    handleBlur: () => void;
+    values: {
+      in?: (value: number) => number;
+      out?: (value: number) => number;
+      unit: string;
+    }[];
+    smallValue: number;
+    bigValue: number;
+  };
+
+  const CustomNumberInput = ({
+    state,
+    handleChange,
+    handleBlur,
+    values = [],
+    smallValue,
+    bigValue,
+  }: CustomNumberInputProps) => {
+    return (
+      <div className="flex items-center gap-1.5">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() =>
+            handleChange((prev) => (prev - bigValue >= 0 ? prev - bigValue : 0))
+          }
+          size="icon"
+          className="shrink-0"
+          disabled={state.value <= 0}
+        >
+          -{bigValue}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() =>
+            handleChange((prev) =>
+              prev - smallValue >= 0 ? prev - smallValue : 0
+            )
+          }
+          size="icon"
+          className="shrink-0"
+          disabled={state.value <= 0}
+        >
+          -{smallValue}
+        </Button>
+        <div className="grow flex justify-center items-center -space-x-1">
+          {values.map((value, i) => {
+            const outValue = value.out ? value.out(state.value) : state.value;
+            return (
+              <div key={i} className="flex items-baseline -space-x-1">
+                <Input
+                  type="number"
+                  className="bg-transparent border-none text-3xl font-bold text-center p-0"
+                  value={outValue}
+                  onChange={(e) =>
+                    handleChange(() => {
+                      if (value.in) {
+                        return value.in(Number(e.target.value));
+                      }
+                      return Number(e.target.value);
+                    })
+                  }
+                  onBlur={handleBlur}
+                  style={{
+                    width: `${
+                      outValue.toString().replace(".", "").length + 1
+                    }ch`,
+                  }}
+                />
+                <div>{value.unit}</div>
+              </div>
+            );
+          })}
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => handleChange((prev) => prev + smallValue)}
+          size="icon"
+          className="shrink-0"
+        >
+          +{smallValue}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => handleChange((prev) => prev + bigValue)}
+          size="icon"
+          className="shrink-0"
+        >
+          +{bigValue}
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <form
       className="flex flex-col gap-4"
@@ -148,7 +261,13 @@ const WorkForm = (props: Props) => {
         children={({ state, handleChange, handleBlur }) => (
           <Select
             defaultValue={state.value === "" ? undefined : state.value}
-            onValueChange={handleChange}
+            onValueChange={(value) => {
+              handleChange(value);
+              setSelectedExerciseType(
+                exercises.find((exercise) => exercise.id === value)?.type ??
+                  null
+              );
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Exercise" />
@@ -161,13 +280,14 @@ const WorkForm = (props: Props) => {
                   </SelectItem>
                 );
               })}
+              <SelectSeparator />
               <SelectItem value="new">Add new exercise</SelectItem>
             </SelectContent>
           </Select>
         )}
       />
       {values.exerciseId === "new" && (
-        <div className="p-4 -mt-3 bg-neutral-50 rounded-b-lg flex space-y-2 flex-col shadow-md border border-dashed">
+        <ExtraSheet className="-mt-3">
           <Field
             name="newExerciseName"
             children={({ state, handleChange, handleBlur }) => (
@@ -183,156 +303,101 @@ const WorkForm = (props: Props) => {
           <Field
             name="newExerciseType"
             children={({ state, handleChange, handleBlur }) => (
-              <Select
-                defaultValue={state.value === "" ? undefined : state.value}
+              <Tabs
+                defaultValue={state.value}
+                value={state.value}
                 onValueChange={handleChange}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Exercise Type" />
-                </SelectTrigger>
-                <SelectContent onBlur={handleBlur}>
-                  {["STRENGTH", "CARDIO"].map((t, i) => {
-                    return (
-                      <SelectItem key={i} value={t}>
-                        {t.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+                <TabsList className="w-full">
+                  <TabsTrigger className="grow" value="STRENGTH">
+                    Strength
+                  </TabsTrigger>
+                  <TabsTrigger className="grow" value="CARDIO">
+                    Cardio
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
             )}
           />
-        </div>
+        </ExtraSheet>
       )}
-      <Field
-        name="weight"
-        children={({ state, handleChange, handleBlur }) => (
-          <div className="flex items-center gap-1.5">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                handleChange((prev) => (prev - 10 >= 0 ? prev - 10 : 0))
-              }
-              size="icon"
-              className="shrink-0"
-              disabled={state.value <= 0}
-            >
-              -10
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                handleChange((prev) => (prev - 2.5 >= 0 ? prev - 2.5 : 0))
-              }
-              size="icon"
-              className="shrink-0"
-              disabled={state.value <= 0}
-            >
-              -2.5
-            </Button>
-            <div className="grow flex justify-center items-baseline">
-              <Input
-                type="number"
-                className="border-none text-3xl font-bold text-center p-0"
-                value={state.value}
-                onChange={(e) => handleChange(Number(e.target.value))}
-                onBlur={handleBlur}
-                style={{
-                  width: `${
-                    state.value.toString().replace(".", "").length + 1
-                  }ch`,
-                }}
+      {selectedExerciseType == ExerciseType.STRENGTH ||
+      (values.exerciseId === "new" &&
+        values.newExerciseType == ExerciseType.STRENGTH) ? (
+        <>
+          <Field
+            name="weight"
+            children={({ state, handleChange, handleBlur }) => (
+              <CustomNumberInput
+                state={state}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                values={[{ unit: "kg" }]}
+                smallValue={2.5}
+                bigValue={10}
               />
-              <div>kg</div>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handleChange((prev) => prev + 2.5)}
-              size="icon"
-              className="shrink-0"
-            >
-              +2.5
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handleChange((prev) => prev + 10)}
-              size="icon"
-              className="shrink-0"
-            >
-              +10
-            </Button>
-          </div>
-        )}
-      />
-      <Field
-        name="reps"
-        children={({ state, handleChange, handleBlur }) => (
-          <div className="flex gap-1.5">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                handleChange((prev) => (prev - 10 >= 0 ? prev - 10 : 0))
-              }
-              size="icon"
-              className="shrink-0"
-              disabled={state.value <= 0}
-            >
-              -10
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                handleChange((prev) => (prev - 1 >= 0 ? prev - 1 : 0))
-              }
-              size="icon"
-              className="shrink-0"
-              disabled={state.value <= 0}
-            >
-              -1
-            </Button>
-            <div className="grow justify-center flex items-baseline">
-              <Input
-                size={1}
-                className="border-none text-3xl font-bold text-center p-0"
-                style={{
-                  width: `${
-                    state.value.toString().replace(".", "").length + 1
-                  }ch`,
-                }}
-                type="number"
-                value={state.value}
-                onChange={(e) => handleChange(parseInt(e.target.value))}
-                onBlur={handleBlur}
+            )}
+          />
+          <Field
+            name="reps"
+            children={({ state, handleChange, handleBlur }) => (
+              <CustomNumberInput
+                state={state}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                values={[{ unit: "reps" }]}
+                smallValue={1}
+                bigValue={10}
               />
-              <div className="">reps</div>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handleChange((prev) => prev + 1)}
-              size="icon"
-              className="shrink-0"
-            >
-              +1
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handleChange((prev) => prev + 10)}
-              size="icon"
-              className="shrink-0"
-            >
-              +10
-            </Button>
-          </div>
-        )}
-      />
+            )}
+          />
+        </>
+      ) : null}
+
+      {selectedExerciseType == ExerciseType.CARDIO ||
+      (values.exerciseId === "new" &&
+        values.newExerciseType === ExerciseType.CARDIO) ? (
+        <>
+          <Field
+            name="distance"
+            children={({ state, handleChange, handleBlur }) => (
+              <CustomNumberInput
+                state={state}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                values={[{ unit: "km" }]}
+                smallValue={0.1}
+                bigValue={1}
+              />
+            )}
+          />
+          <Field
+            name="time"
+            children={({ state, handleChange, handleBlur }) => (
+              <CustomNumberInput
+                state={state}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                values={[
+                  {
+                    in: (value) => value * 60,
+                    out: (value) => Math.floor(value / 60),
+                    unit: "m",
+                  },
+                  {
+                    in: (value) => value,
+                    out: (value) => value % 60,
+                    unit: "s",
+                  },
+                ]}
+                smallValue={15}
+                bigValue={120}
+              />
+            )}
+          />
+        </>
+      ) : null}
+
       <Field
         name="memo"
         children={({ state, handleChange, handleBlur }) => (

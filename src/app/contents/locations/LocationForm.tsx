@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction } from "react";
+import { toast } from "sonner";
 
 type Props = {
   defaultValue?: InferResponseType<typeof client.api.location.$get, 200>[0];
@@ -32,7 +33,14 @@ const LocationForm = ({ defaultValue, setLocations }: Props) => {
         },
       });
 
-      if (!res.ok) return;
+      if (!res.ok) {
+        toast.error("Failed to save location");
+        return;
+      }
+
+      toast.success(
+        `Location ${isEditing ? "updated" : "created"} successfully`
+      );
 
       const data = await res.json();
 

@@ -19,17 +19,18 @@ export const ListMenuGroup = ({
   children,
   ...props
 }: ListMenuGroupProps) => {
-  if (!children) return null;
   return (
     <div {...props}>
       {title && <div className="p-2 font-semibold">{title}</div>}
-      <div className="flex flex-col rounded-xl border">{children}</div>
+      <div className="flex flex-col rounded-xl border empty:hidden">
+        {children}
+      </div>
     </div>
   );
 };
 
 type ListMenuItemProps = {
-  title: string;
+  title?: React.ReactNode;
   iconName?: string;
   href?: string;
   endContent?: React.ReactNode;
@@ -66,7 +67,11 @@ export const ListMenuItem = ({
   return (
     <Link href={href} className={wrapperClassName} {...props}>
       <ItemContent />
-      <Icon className="ml-auto text-neutral-400" name="ChevronRight" size={18} />
+      <Icon
+        className="ml-auto text-neutral-400"
+        name="ChevronRight"
+        size={18}
+      />
     </Link>
   );
 };

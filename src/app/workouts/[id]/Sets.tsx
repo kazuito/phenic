@@ -1,7 +1,7 @@
 "use client";
 
 import Icon from "@/components/Icon";
-import { Prisma } from "@prisma/client";
+import { ExerciseType, Prisma } from "@prisma/client";
 import WorkHeader from "./WorkHeader";
 import {
   Dialog,
@@ -55,15 +55,29 @@ const Sets = ({ workout }: Props) => {
                           <div className="tracking-tighter mr-1 size-5 text-sm font-bold bg-black text-white grid place-content-center rounded-md">
                             {j + 1}
                           </div>
-                          <div className="font-bold text-xl">
-                            {set.weight}kg
-                          </div>
-                          <Icon name="X" size={14} />
-                          <div>{set.reps}</div>
+                          {set.exercise.type === ExerciseType.STRENGTH ? (
+                            <>
+                              <div className="font-bold text-xl">
+                                {set.weight}kg
+                              </div>
+                              <Icon name="X" size={14} />
+                              <div>{set.reps}</div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="font-bold text-xl">
+                                {set.distance}km
+                              </div>
+                              <Icon name="Ellipsis" size={14} />
+                              <div className="flex items-center gap-0.5">
+                                <div>{Math.floor((set.time ?? 0) / 60)}m</div>
+                                <div>{(set.time ?? 0) % 60}s</div>
+                              </div>
+                            </>
+                          )}
                           <div className="truncate text-sm ml-2 text-neutral-400">
                             {set.memo}
                           </div>
-                          <div className="ml-auto"></div>
                         </div>
                       </DialogTrigger>
                       <DialogContent>

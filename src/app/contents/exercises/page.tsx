@@ -5,7 +5,13 @@ import client from "@/lib/hono";
 import { InferResponseType } from "hono";
 import PageHeader from "@/components/PageHeader";
 import Exercise from "./Exercise";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/Icon";
 import ExerciseForm from "./ExerciseForm";
@@ -39,6 +45,9 @@ const Page = () => {
             </Button>
           </DialogTrigger>
           <DialogContent>
+            <DialogHeader>
+              <DialogTitle>New Exercise</DialogTitle>
+            </DialogHeader>
             <ExerciseForm setExercises={setExercises} />
           </DialogContent>
         </Dialog>

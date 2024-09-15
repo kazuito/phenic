@@ -1,4 +1,5 @@
 import Icon from "@/components/Icon";
+import ExtraSheet from "@/components/myui/extra-sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -14,6 +15,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -27,7 +29,7 @@ import { useEffect, useState } from "react";
 const WorkoutForm = () => {
   const router = useRouter();
 
-  const { Field, useStore, handleSubmit } = useForm({
+  const { Field, useStore, handleSubmit, setFieldValue } = useForm({
     defaultValues: {
       date: new Date(),
       locationId: "",
@@ -48,10 +50,10 @@ const WorkoutForm = () => {
     },
   });
 
-  const [locations, setLocations] = useState<
-    InferResponseType<typeof client.api.location.$get, 200>
-  >([]);
-  [];
+  const [locations, setLocations] = useState<InferResponseType<
+    typeof client.api.location.$get,
+    200
+  > | null>(null);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -60,8 +62,14 @@ const WorkoutForm = () => {
       if (!res.ok) {
         return;
       }
-      const locations = await res.json();
-      setLocations(locations);
+      const data = await res.json();
+      setLocations(data);
+
+      data.forEach((location) => {
+        if (location.isDefault) {
+          setFieldValue("locationId", location.id);
+        }
+      });
     };
 
     fetchLocations();
@@ -74,32 +82,38 @@ const WorkoutForm = () => {
           e.preventDefault();
           handleSubmit();
         }}
-        className="p-4 flex flex-col gap-2"
+        className="flex flex-col gap-3 pt-2"
       >
         <Field
           name="locationId"
           children={({ state, handleChange, handleBlur }) => (
-            <Select value={state.value} onValueChange={handleChange}>
+            <Select
+              value={state.value}
+              onValueChange={handleChange}
+              disabled={locations === null}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select location" />
               </SelectTrigger>
               <SelectContent onBlur={handleBlur}>
-                <SelectGroup>
-                  {locations.map((location) => (
-                    <SelectItem key={location.id} value={location.id}>
-                      {location.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectItem value="new">New location</SelectItem>
-                </SelectGroup>
+                {locations?.map((location) => (
+                  <SelectItem key={location.id} value={location.id}>
+                    {location.name}
+                    {location.isDefault && (
+                      <Badge variant="outline" className="ml-2">
+                        Default
+                      </Badge>
+                    )}
+                  </SelectItem>
+                ))}
+                <SelectSeparator />
+                <SelectItem value="new">New location</SelectItem>
               </SelectContent>
             </Select>
           )}
         />
         {useStore((state) => state.values.locationId) === "new" && (
-          <div className="p-4 bg-neutral-100 rounded-xl flex space-y-2 flex-col">
+          <ExtraSheet className="-mt-2">
             <Field
               name="newLocationName"
               children={({ state, handleChange, handleBlur }) => (
@@ -111,7 +125,7 @@ const WorkoutForm = () => {
                 />
               )}
             />
-          </div>
+          </ExtraSheet>
         )}
         <Field
           name="date"

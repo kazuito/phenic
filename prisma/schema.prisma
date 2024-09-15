@@ -13,6 +13,7 @@ model Location {
   userId    String
   user      User      @relation(fields: [userId], references: [id])
   workouts  Workout[]
+  isDefault Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -30,7 +31,7 @@ model Exercise {
   userId    String
   user      User         @relation(fields: [userId], references: [id])
   sets      Set[]
-  type      ExerciseType @default(STRENGTH)
+  type      ExerciseType
 }
 
 model Set {

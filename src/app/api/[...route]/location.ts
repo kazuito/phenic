@@ -93,6 +93,46 @@ const app = new Hono()
 
       return c.json(location);
     }
+  )
+  .get(
+    "/default/:id",
+    zValidator(
+      "param",
+      z.object({
+        id: z.string(),
+      })
+    ),
+    async (c) => {
+      const session = await auth();
+
+      if (!session || !session?.user || !session.user.id) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const body = c.req.valid("param");
+
+      await prisma.location.updateMany({
+        where: {
+          userId: session.user.id,
+          isDefault: true,
+        },
+        data: {
+          isDefault: false,
+        },
+      });
+
+      const location = await prisma.location.update({
+        where: {
+          id: body.id,
+          userId: session.user.id,
+        },
+        data: {
+          isDefault: true,
+        },
+      });
+
+      return c.json(location);
+    }
   );
 
 export default app;

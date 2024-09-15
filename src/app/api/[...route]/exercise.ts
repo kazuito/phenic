@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { prisma } from "../../../lib/prisma";
 import { zValidator } from "@hono/zod-validator";
+import { ExerciseType } from "@prisma/client";
 
 export const schemas = {
   post: z.object({}),
@@ -34,6 +35,7 @@ const app = new Hono()
       z.object({
         id: z.string(),
         name: z.string(),
+        type: z.nativeEnum(ExerciseType),
       })
     ),
     async (c) => {
@@ -50,6 +52,7 @@ const app = new Hono()
         const exercise = await prisma.exercise.create({
           data: {
             title: body.name,
+            type: body.type,
             userId: session.user.id,
           },
         });
@@ -61,6 +64,7 @@ const app = new Hono()
       const exercise = await prisma.exercise.update({
         where: {
           id: body.id,
+          userId: session.user.id,
         },
         data: {
           title: body.name,
