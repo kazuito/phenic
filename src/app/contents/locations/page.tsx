@@ -5,7 +5,13 @@ import client from "@/lib/hono";
 import { InferResponseType } from "hono";
 import PageHeader from "@/components/PageHeader";
 import Location from "./Location";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import LocationForm from "./LocationForm";
 import { ListMenu, ListMenuGroup } from "@/components/myui/list-menu";
@@ -38,11 +44,14 @@ const Page = () => {
         <Dialog>
           <DialogTrigger asChild>
             <Button className="w-full" variant="outline">
-              <Plus  className="mr-2" size={16} />
+              <Plus className="mr-2" size={16} />
               New Location
             </Button>
           </DialogTrigger>
           <DialogContent>
+            <DialogHeader>
+              <DialogTitle>New Location</DialogTitle>
+            </DialogHeader>
             <LocationForm setLocations={setLocations} />
           </DialogContent>
         </Dialog>
