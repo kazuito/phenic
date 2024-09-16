@@ -91,7 +91,7 @@ const DropdownMenuItem = React.forwardRef<
     )}
     {...props}
   >
-    {icon && React.cloneElement(icon, { size: 16 })}
+    {icon && <div className="mr-2">{React.cloneElement(icon, { size: 14 })}</div>}
     {children}
   </DropdownMenuPrimitive.Item>
 ));
