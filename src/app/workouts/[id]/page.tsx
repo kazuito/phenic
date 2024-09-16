@@ -34,7 +34,7 @@ const Page = async (props: Props) => {
 
   return (
     <div className="">
-      <CustomPageHeader title={dateText} workoutId={workout.id} />
+      <CustomPageHeader heading={dateText} workoutId={workout.id} />
       <div className="pb-20">
         <InfoCard location={workout.location.name} />
         <Works workout={workout} />

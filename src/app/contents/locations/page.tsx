@@ -10,11 +10,13 @@ import { Button } from "@/components/ui/button";
 import Icon from "@/components/Icon";
 import LocationForm from "./LocationForm";
 import { ListMenu, ListMenuGroup } from "@/components/myui/list-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Page = () => {
   const [locations, setLocations] = useState<
     InferResponseType<typeof client.api.location.$get, 200>
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchLocations = async () => {
     const res = await client.api.location.$get();
@@ -22,6 +24,7 @@ const Page = () => {
 
     const data = await res.json();
     setLocations(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -43,19 +46,23 @@ const Page = () => {
             <LocationForm setLocations={setLocations} />
           </DialogContent>
         </Dialog>
-        <ListMenu className="flex flex-col mt-4 gap-2">
-          <ListMenuGroup>
-            {locations.map((location, i) => {
-              return (
-                <Location
-                  setLocations={setLocations}
-                  location={location}
-                  key={i}
-                />
-              );
-            })}
-          </ListMenuGroup>
-        </ListMenu>
+        {isLoading ? (
+          <Skeleton className="h-96 w-full mt-4 rounded-xl" />
+        ) : (
+          <ListMenu className="flex flex-col mt-4 gap-2">
+            <ListMenuGroup>
+              {locations.map((location, i) => {
+                return (
+                  <Location
+                    setLocations={setLocations}
+                    location={location}
+                    key={i}
+                  />
+                );
+              })}
+            </ListMenuGroup>
+          </ListMenu>
+        )}
       </div>
     </div>
   );

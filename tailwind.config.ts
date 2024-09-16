@@ -55,6 +55,15 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      animation: {
+        "run-loop": "run 1.95s ease infinite",
+      },
+      keyframes: {
+        run: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

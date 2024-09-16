@@ -1,3 +1,5 @@
+"use client";
+
 import Icon from "@/components/Icon";
 import ExtraSheet from "@/components/myui/extra-sheet";
 import { Badge } from "@/components/ui/badge";
@@ -145,11 +147,11 @@ const WorkoutForm = () => {
                   )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent>
+              <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
                   selected={state.value}
-                  onSelect={(date) => handleChange(date as Date)}
+                  // onSelect={(date) => handleChange(date as Date)}
                   initialFocus
                 />
               </PopoverContent>

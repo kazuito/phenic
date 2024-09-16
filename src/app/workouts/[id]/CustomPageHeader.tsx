@@ -14,11 +14,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 type Props = {
-  title: string;
+  heading: React.ReactNode;
   workoutId: string;
 };
 
-const Header = ({ title, workoutId }: Props) => {
+const Header = ({ heading, workoutId }: Props) => {
   const router = useRouter();
   const deleteWorkout = async () => {
     const res = await client.api.workout.delete[":id"].$get({
@@ -37,8 +37,7 @@ const Header = ({ title, workoutId }: Props) => {
 
   return (
     <PageHeader
-      title={title}
-      backText="Workouts"
+      heading={heading}
       backHref="/workouts"
       content={
         <DropdownMenu>

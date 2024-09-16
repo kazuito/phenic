@@ -16,17 +16,22 @@ import { Button } from "@/components/ui/button";
 import Icon from "@/components/Icon";
 import ExerciseForm from "./ExerciseForm";
 import { ListMenu, ListMenuGroup } from "@/components/myui/list-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Page = () => {
   const [exercises, setExercises] = useState<
     InferResponseType<typeof client.api.exercise.$get, 200>
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchExercises = async () => {
     const res = await client.api.exercise.$get();
-    if (!res.ok) return;
+    if (!res.ok) {
+      return;
+    }
     const data = await res.json();
     setExercises(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -51,19 +56,23 @@ const Page = () => {
             <ExerciseForm setExercises={setExercises} />
           </DialogContent>
         </Dialog>
-        <ListMenu>
-          <ListMenuGroup className="mt-4">
-            {exercises.map((exercise, i) => {
-              return (
-                <Exercise
-                  setExercises={setExercises}
-                  exercise={exercise}
-                  key={i}
-                />
-              );
-            })}
-          </ListMenuGroup>
-        </ListMenu>
+        {isLoading ? (
+          <Skeleton className="h-96 w-full mt-4 rounded-xl" />
+        ) : (
+          <ListMenu>
+            <ListMenuGroup className="mt-4">
+              {exercises.map((exercise, i) => {
+                return (
+                  <Exercise
+                    setExercises={setExercises}
+                    exercise={exercise}
+                    key={i}
+                  />
+                );
+              })}
+            </ListMenuGroup>
+          </ListMenu>
+        )}
       </div>
     </div>
   );
