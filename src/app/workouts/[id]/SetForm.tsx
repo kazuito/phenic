@@ -128,6 +128,7 @@ const WorkForm = (props: Props) => {
   });
 
   const values = useStore((state) => state.values);
+  const isSubmitting = useStore((state) => state.isSubmitting);
 
   const fetchExercises = async () => {
     const res = await client.api.exercise.$get();
@@ -414,7 +415,11 @@ const WorkForm = (props: Props) => {
             Delete
           </Button>
         )}
-        <Button type="submit" className="ml-auto gap-1.5">
+        <Button
+          type="submit"
+          className="ml-auto gap-1.5"
+          isLoading={isSubmitting}
+        >
           {isUpdate ? "Update" : "Add"}
         </Button>
       </div>

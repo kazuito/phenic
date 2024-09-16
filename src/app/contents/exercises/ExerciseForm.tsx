@@ -18,7 +18,7 @@ type Props = {
 const ExerciseForm = ({ defaultValue, setExercises }: Props) => {
   const isEdit = defaultValue ? true : false;
 
-  const { Field, handleSubmit } = useForm({
+  const { Field, handleSubmit, useStore } = useForm({
     defaultValues: defaultValue
       ? {
           name: defaultValue.title,
@@ -49,6 +49,8 @@ const ExerciseForm = ({ defaultValue, setExercises }: Props) => {
     },
   });
 
+  const isSubmitting = useStore((state) => state.isSubmitting);
+
   return (
     <div className="">
       <form
@@ -72,7 +74,7 @@ const ExerciseForm = ({ defaultValue, setExercises }: Props) => {
         />
         <Field
           name="type"
-          children={({ state, handleChange, handleBlur }) => (
+          children={({ state, handleChange }) => (
             <Tabs
               defaultValue={state.value}
               value={state.value}
@@ -99,7 +101,7 @@ const ExerciseForm = ({ defaultValue, setExercises }: Props) => {
         />
         <div className="flex mt-2">
           <DialogClose asChild>
-            <Button type="submit" className="ml-auto">
+            <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
               {isEdit ? "Update" : "Add"}
             </Button>
           </DialogClose>

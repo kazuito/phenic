@@ -17,7 +17,7 @@ type Props = {
 const LocationForm = ({ defaultValue, setLocations }: Props) => {
   const isEditing = defaultValue ? true : false;
 
-  const { Field, handleSubmit } = useForm({
+  const { Field, handleSubmit, useStore } = useForm({
     defaultValues: defaultValue
       ? {
           name: defaultValue.name,
@@ -52,6 +52,8 @@ const LocationForm = ({ defaultValue, setLocations }: Props) => {
     },
   });
 
+  const isSubmitting = useStore((state) => state.isSubmitting);
+
   return (
     <div className="">
       <form
@@ -74,7 +76,7 @@ const LocationForm = ({ defaultValue, setLocations }: Props) => {
         />
         <div className="flex mt-4">
           <DialogClose asChild>
-            <Button type="submit" className="ml-auto">
+            <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
               Save
             </Button>
           </DialogClose>
