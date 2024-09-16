@@ -90,11 +90,36 @@ const Sets = ({ workout }: Props) => {
                           setSets={setSets}
                           workoutId={workout.id}
                           defaultValues={set}
+                          isEdit
                         />
                       </DialogContent>
                     </Dialog>
                   );
                 })}
+                {i === workGroups.length - 1 && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        className="w-full mt-2"
+                        variant="outline"
+                        size="sm"
+                      >
+                        <Plus size={14} className="mr-2" />
+                        Add {workGroup[0].exercise.title}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>New Set</DialogTitle>
+                      </DialogHeader>
+                      <WorkForm
+                        setSets={setSets}
+                        workoutId={workout.id}
+                        defaultValues={workGroup[workGroup.length - 1]}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
             </div>
           </div>
@@ -102,8 +127,12 @@ const Sets = ({ workout }: Props) => {
       })}
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="w-full mt-2" variant="outline" size="sm">
-            <Plus size={14} />
+          <Button
+            className="w-full mt-2 rounded-full sticky bottom-[72px] shadow-lg"
+            size="lg"
+          >
+            <Plus size={14} className="mr-2" />
+            Add new set
           </Button>
         </DialogTrigger>
         <DialogContent>

@@ -37,11 +37,10 @@ type Props = {
       exercise: true;
     };
   }>;
+  isEdit?: boolean;
 };
 
-const WorkForm = (props: Props) => {
-  const isUpdate = props.defaultValues ? true : false;
-
+const WorkForm = ({ isEdit = false, ...props }: Props) => {
   const [exercises, setExercises] = useState<
     InferResponseType<typeof client.api.exercise.$get, 200>
   >([]);
@@ -88,14 +87,12 @@ const WorkForm = (props: Props) => {
       });
 
       if (!res.ok) {
-        toast.error(
-          isUpdate ? "Failed to update set" : "Failed to add new set"
-        );
+        toast.error(isEdit ? "Failed to update set" : "Failed to add new set");
         return;
       }
 
       toast.success(
-        isUpdate ? "Updated set successfully" : "Added new set successfully"
+        isEdit ? "Updated set successfully" : "Added new set successfully"
       );
 
       const newSet: Prisma.SetGetPayload<{
@@ -115,7 +112,7 @@ const WorkForm = (props: Props) => {
         };
       });
 
-      if (isUpdate) {
+      if (isEdit) {
         props.setSets((prev) =>
           prev.map((s) => (s.id === newSet.id ? newSet : s))
         );
@@ -408,7 +405,7 @@ const WorkForm = (props: Props) => {
       />
 
       <div className="flex flex-row">
-        {isUpdate && (
+        {isEdit && (
           <Button type="button" variant="destructive">
             Delete
           </Button>
@@ -418,7 +415,7 @@ const WorkForm = (props: Props) => {
           className="ml-auto gap-1.5"
           isLoading={isSubmitting}
         >
-          {isUpdate ? "Update" : "Add"}
+          {isEdit ? "Update" : "Add"}
         </Button>
       </div>
     </form>

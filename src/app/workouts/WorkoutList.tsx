@@ -58,10 +58,10 @@ const WorkoutList = () => {
           })}
         </div>
       ) : null}
-      <div className="fixed bottom-16 w-full px-4">
+      <div className="fixed bottom-[72px] w-full px-4">
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="w-full rounded-full animate-fade-up" size="lg">
+            <Button className="w-full rounded-full animate-fade-up shadow-lg" size="lg">
               <Plus className="mr-2" size={16} />
               New Workout
             </Button>
