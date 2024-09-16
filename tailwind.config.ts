@@ -9,6 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        concept: {
+          "50": "#fdffe7",
+          "100": "#f9ffc1",
+          "200": "#f8ff86",
+          "300": "#fbff41",
+          "400": "#fff80d",
+          "500": "#ffea00",
+          "600": "#d1ae00",
+          "700": "#a67d02",
+          "800": "#89610a",
+          "900": "#744f0f",
+          "950": "#442a04",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

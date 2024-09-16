@@ -39,22 +39,8 @@ const WorkoutList = () => {
 
   return (
     <div className={cn("flex flex-col items-center p-4")}>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="w-full" variant="outline">
-            <Plus className="mr-2" size={16} />
-            New Workout
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>New Workout</DialogTitle>
-          </DialogHeader>
-          <WorkoutForm />
-        </DialogContent>
-      </Dialog>
       {isLoading && (
-        <div className="mt-4 flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-2 w-full">
           {Array.from({ length: 6 }).map((_, i) => (
             <Skeleton className="h-24 w-full rounded-xl shrink-0" key={i} />
           ))}
@@ -66,12 +52,28 @@ const WorkoutList = () => {
         </div>
       ) : null}
       {!isLoading && workouts.length > 0 ? (
-        <div className="flex flex-col mt-4 w-full gap-2">
+        <div className="flex flex-col w-full gap-2">
           {workouts.map((workout, i) => {
             return <Workout workout={workout} key={i} />;
           })}
         </div>
       ) : null}
+      <div className="fixed bottom-16 w-full px-4">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="w-full rounded-full" size="lg">
+              <Plus className="mr-2" size={16} />
+              New Workout
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>New Workout</DialogTitle>
+            </DialogHeader>
+            <WorkoutForm />
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 };
