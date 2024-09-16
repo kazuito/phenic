@@ -1,6 +1,5 @@
 "use client";
 
-import Icon from "@/components/Icon";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import client from "@/lib/hono";
+import { EllipsisIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -43,11 +43,14 @@ const Header = ({ heading, workoutId }: Props) => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="ghost">
-              <Icon name="Ellipsis" size={18} />
+              <EllipsisIcon size={18} />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => deleteWorkout()} iconName="Trash">
+            <DropdownMenuItem
+              onClick={() => deleteWorkout()}
+              icon={<TrashIcon />}
+            >
               Delete workout
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -4,6 +4,7 @@ import {
   ListMenuItem,
 } from "@/components/myui/list-menu";
 import PageHeader from "@/components/PageHeader";
+import { UserIcon } from "lucide-react";
 
 type Props = {};
 
@@ -15,7 +16,7 @@ const Page = ({}: Props) => {
         <ListMenuGroup>
           <ListMenuItem
             heading="Profile"
-            iconName="User"
+            icon={<UserIcon />}
             href="/settings/profile"
           />
         </ListMenuGroup>

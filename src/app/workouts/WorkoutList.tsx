@@ -1,12 +1,6 @@
 "use client";
 
-import Workout from "./Workout";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import client from "@/lib/hono";
-import { InferResponseType } from "hono";
-import Icon from "@/components/Icon";
-import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -14,8 +8,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import WorkoutForm from "./WorkoutForm";
 import { Skeleton } from "@/components/ui/skeleton";
+import client from "@/lib/hono";
+import { cn } from "@/lib/utils";
+import { InferResponseType } from "hono";
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import Workout from "./Workout";
+import WorkoutForm from "./WorkoutForm";
 
 const WorkoutList = () => {
   const [workouts, setWorkouts] = useState<
@@ -42,7 +42,7 @@ const WorkoutList = () => {
       <Dialog>
         <DialogTrigger asChild>
           <Button className="w-full" variant="outline">
-            <Icon name="Plus" className="mr-2" size={16} />
+            <Plus className="mr-2" size={16} />
             New Workout
           </Button>
         </DialogTrigger>

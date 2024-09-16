@@ -3,6 +3,7 @@ import {
   ListMenuGroup,
   ListMenuItem,
 } from "@/components/myui/list-menu";
+import { DumbbellIcon, LandPlotIcon } from "lucide-react";
 
 const Page = () => {
   return (
@@ -11,12 +12,12 @@ const Page = () => {
         <ListMenuGroup title="Your contents">
           <ListMenuItem
             heading="Exercises"
-            iconName="Dumbbell"
+            icon={<DumbbellIcon />}
             href="/contents/exercises"
           />
           <ListMenuItem
             heading="Locations"
-            iconName="LandPlot"
+            icon={<LandPlotIcon />}
             href="/contents/locations"
           />
         </ListMenuGroup>

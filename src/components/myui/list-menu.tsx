@@ -1,6 +1,7 @@
 import Link from "next/link";
-import Icon from "../Icon";
 import { cn } from "@/lib/utils";
+import { ChevronRightIcon, icons } from "lucide-react";
+import { cloneElement } from "react";
 
 type ListMenuProps = {
   children: React.ReactNode;
@@ -31,14 +32,14 @@ export const ListMenuGroup = ({
 
 type ListMenuItemProps = {
   heading: React.ReactNode;
-  iconName?: string;
+  icon?: React.ReactElement;
   href?: string;
   endContent?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement>;
 
 export const ListMenuItem = ({
   heading,
-  iconName,
+  icon,
   href,
   endContent,
   className,
@@ -46,7 +47,7 @@ export const ListMenuItem = ({
 }: ListMenuItemProps) => {
   const ItemContent = () => (
     <>
-      {iconName && <Icon name={iconName} size={18} />}
+      {icon && cloneElement(icon, { size: 18 })}
       {heading}
       {endContent && <div className="ml-auto">{endContent}</div>}
     </>
@@ -67,11 +68,7 @@ export const ListMenuItem = ({
   return (
     <Link href={href} className={wrapperClassName} {...props}>
       <ItemContent />
-      <Icon
-        className="ml-auto text-neutral-400"
-        name="ChevronRight"
-        size={18}
-      />
+      <ChevronRightIcon className="ml-auto text-neutral-400" size={18} />
     </Link>
   );
 };

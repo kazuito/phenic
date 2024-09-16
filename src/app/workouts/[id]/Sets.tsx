@@ -1,6 +1,5 @@
 "use client";
 
-import Icon from "@/components/Icon";
 import { ExerciseType, Prisma } from "@prisma/client";
 import WorkHeader from "./WorkHeader";
 import {
@@ -14,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import WorkForm from "./SetForm";
 import { catSeries } from "@/lib/utils";
 import { useState } from "react";
+import { Ellipsis, Plus, X } from "lucide-react";
 
 type Props = {
   workout: Prisma.WorkoutGetPayload<{
@@ -60,7 +60,7 @@ const Sets = ({ workout }: Props) => {
                               <div className="font-bold text-xl">
                                 {set.weight}kg
                               </div>
-                              <Icon name="X" size={14} />
+                              <X size={14} />
                               <div>{set.reps}</div>
                             </>
                           ) : (
@@ -68,7 +68,7 @@ const Sets = ({ workout }: Props) => {
                               <div className="font-bold text-xl">
                                 {set.distance}km
                               </div>
-                              <Icon name="Ellipsis" size={14} />
+                              <Ellipsis size={14} />
                               <div className="flex items-center gap-0.5">
                                 <div>{Math.floor((set.time ?? 0) / 60)}m</div>
                                 <div>{(set.time ?? 0) % 60}s</div>
@@ -103,7 +103,7 @@ const Sets = ({ workout }: Props) => {
       <Dialog>
         <DialogTrigger asChild>
           <Button className="w-full mt-2" variant="outline" size="sm">
-            <Icon name="Plus" size={14} />
+            <Plus size={14} />
           </Button>
         </DialogTrigger>
         <DialogContent>

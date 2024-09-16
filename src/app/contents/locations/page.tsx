@@ -7,10 +7,10 @@ import PageHeader from "@/components/PageHeader";
 import Location from "./Location";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import Icon from "@/components/Icon";
 import LocationForm from "./LocationForm";
 import { ListMenu, ListMenuGroup } from "@/components/myui/list-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Plus } from "lucide-react";
 
 const Page = () => {
   const [locations, setLocations] = useState<
@@ -38,7 +38,7 @@ const Page = () => {
         <Dialog>
           <DialogTrigger asChild>
             <Button className="w-full" variant="outline">
-              <Icon name="Plus" className="mr-2" size={16} />
+              <Plus  className="mr-2" size={16} />
               New Location
             </Button>
           </DialogTrigger>

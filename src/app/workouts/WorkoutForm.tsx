@@ -1,6 +1,5 @@
 "use client";
 
-import Icon from "@/components/Icon";
 import ExtraSheet from "@/components/myui/extra-sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +23,7 @@ import client from "@/lib/hono";
 import { useForm } from "@tanstack/react-form";
 import dayjs from "dayjs";
 import { InferResponseType } from "hono";
+import { Calendar as IconCalendar } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -134,7 +134,7 @@ const WorkoutForm = () => {
             <Popover>
               <PopoverTrigger asChild>
                 <Button className="justify-start" variant="outline">
-                  <Icon name="Calendar" className="mr-2" size={16} />
+                  <IconCalendar className="mr-2" size={16} />
                   {state.value ? (
                     dayjs(state.value).format("MMM D, YYYY")
                   ) : (

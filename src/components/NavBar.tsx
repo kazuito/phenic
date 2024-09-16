@@ -1,12 +1,13 @@
+import { DumbbellIcon, NotebookTabsIcon, SettingsIcon } from "lucide-react";
 import Link from "next/link";
-import Icon from "./Icon";
+import { cloneElement } from "react";
 
 const NavBar = () => {
   return (
     <nav className="flex p-1 w-full bg-white gap-1 justify-around fixed bottom-0 border-t">
-      <NavItem title="House" href="/contents" iconName="Dumbbell" />
-      <NavItem title="House" href="/workouts" iconName="NotebookTabs" />
-      <NavItem title="Account" href="/settings" iconName="Settings" />
+      <NavItem title="House" href="/contents" icon={<DumbbellIcon />} />
+      <NavItem title="House" href="/workouts" icon={<NotebookTabsIcon />} />
+      <NavItem title="Account" href="/settings" icon={<SettingsIcon />} />
     </nav>
   );
 };
@@ -14,16 +15,16 @@ const NavBar = () => {
 type NavItemProps = {
   title: string;
   href: string;
-  iconName: string;
+  icon: React.ReactElement;
 };
 
-const NavItem = (props: NavItemProps) => {
+const NavItem = ({ title, href, icon }: NavItemProps) => {
   return (
     <Link
-      href={props.href}
+      href={href}
       className="rounded-full p-3 grow flex justify-center items-center"
     >
-      <Icon size={24} name={props.iconName} />
+      {cloneElement(icon, { size: 24 })}
     </Link>
   );
 };

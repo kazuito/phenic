@@ -5,7 +5,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Check, ChevronRight, Circle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import Icon from "../Icon";
+import dynamicIconImports from "lucide-react/dynamicIconImports";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -79,9 +79,9 @@ const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean;
-    iconName?: string;
+    icon?: React.ReactElement;
   }
->(({ className, inset, iconName, children, ...props }, ref) => (
+>(({ className, inset, icon, children, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
@@ -91,7 +91,7 @@ const DropdownMenuItem = React.forwardRef<
     )}
     {...props}
   >
-    {iconName && <Icon name={iconName} className="mr-2" size={14} />}
+    {icon && React.cloneElement(icon, { size: 16 })}
     {children}
   </DropdownMenuPrimitive.Item>
 ));

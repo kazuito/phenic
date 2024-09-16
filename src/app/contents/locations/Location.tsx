@@ -1,4 +1,5 @@
-import Icon from "@/components/Icon";
+import { ListMenuItem } from "@/components/myui/list-menu";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,16 +11,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import client from "@/lib/hono";
 import { InferResponseType } from "hono";
+import { CircleDashed, Ellipsis, PencilIcon, TrashIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
-import LocationForm from "./LocationForm";
-import { ListMenuItem } from "@/components/myui/list-menu";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
+import LocationForm from "./LocationForm";
 
 type Props = {
   location: InferResponseType<typeof client.api.location.$get, 200>[0];
@@ -79,19 +79,19 @@ const Location = ({ setLocations, location }: Props) => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size="icon" variant="ghost">
-                  <Icon name="Ellipsis" size={18} />
+                  <Ellipsis size={18} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
-                  iconName="Pencil"
+                  icon={<PencilIcon />}
                   onClick={() => setIsEditing(true)}
                 >
                   Edit
                 </DropdownMenuItem>
                 {location.isDefault ? null : (
                   <DropdownMenuItem
-                    iconName="CircleDashed"
+                    icon={<CircleDashed />}
                     onClick={() => setDefaultLocation()}
                   >
                     Set as default
@@ -99,7 +99,7 @@ const Location = ({ setLocations, location }: Props) => {
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  iconName="Trash"
+                  icon={<TrashIcon />}
                   onClick={() => deleteLocation()}
                 >
                   Delete

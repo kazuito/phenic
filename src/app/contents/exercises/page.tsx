@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import client from "@/lib/hono";
-import { InferResponseType } from "hono";
+import { ListMenu, ListMenuGroup } from "@/components/myui/list-menu";
 import PageHeader from "@/components/PageHeader";
-import Exercise from "./Exercise";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import Icon from "@/components/Icon";
-import ExerciseForm from "./ExerciseForm";
-import { ListMenu, ListMenuGroup } from "@/components/myui/list-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import client from "@/lib/hono";
+import { InferResponseType } from "hono";
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import Exercise from "./Exercise";
+import ExerciseForm from "./ExerciseForm";
 
 const Page = () => {
   const [exercises, setExercises] = useState<
@@ -45,7 +45,7 @@ const Page = () => {
         <Dialog>
           <DialogTrigger asChild>
             <Button className="w-full" variant="outline">
-              <Icon name="Plus" className="mr-2" size={16} />
+              <Plus className="mr-2" size={16} />
               New Exercise
             </Button>
           </DialogTrigger>

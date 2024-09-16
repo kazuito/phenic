@@ -1,4 +1,4 @@
-import Icon from "@/components/Icon";
+import { ListMenuItem } from "@/components/myui/list-menu";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import client from "@/lib/hono";
 import { InferResponseType } from "hono";
+import { EllipsisIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
-import ExerciseForm from "./ExerciseForm";
 import { toast } from "sonner";
-import { ListMenuItem } from "@/components/myui/list-menu";
+import ExerciseForm from "./ExerciseForm";
 
 type Props = {
   exercise: InferResponseType<typeof client.api.exercise.$get, 200>[0];
@@ -52,18 +52,18 @@ const Exercise = ({ setExercises, exercise }: Props) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="ghost">
-                <Icon name="Ellipsis" size={18} />
+                <EllipsisIcon size={18} />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem
-                iconName="Pencil"
+                icon={<PencilIcon />}
                 onClick={() => setIsEditing(true)}
               >
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
-                iconName="Trash"
+                icon={<TrashIcon />}
                 onClick={() => deleteExercise()}
               >
                 Delete

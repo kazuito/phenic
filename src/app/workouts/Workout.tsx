@@ -1,8 +1,8 @@
-import { InferResponseType } from "hono";
+import { Badge } from "@/components/ui/badge";
 import client from "@/lib/hono";
 import dayjs from "dayjs";
+import { InferResponseType } from "hono";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 
 type Props = {
   workout: InferResponseType<typeof client.api.workout.$get, 200>[0];
