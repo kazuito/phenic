@@ -6,10 +6,9 @@ import Link from "next/link";
 
 type Props = {
   workout: InferResponseType<typeof client.api.workout.$get, 200>[0];
-  index: number;
 };
 
-const Workout = ({ workout, index }: Props) => {
+const Workout = ({ workout }: Props) => {
   const exerciseNames = Array.from(
     new Set(
       workout.sets.map((set) => {
@@ -21,10 +20,7 @@ const Workout = ({ workout, index }: Props) => {
   return (
     <Link
       href={`/workouts/${workout.id}`}
-      className="border p-4 w-full rounded-lg animate-fade-in opacity-0"
-      style={{
-        animationDelay: 0.05 * index + "s",
-      }}
+      className="border p-4 w-full rounded-lg"
     >
       <div className="flex items-center gap-1">
         <div className="">{dayjs(workout.date).format("MMM DD")}</div>・

@@ -54,7 +54,7 @@ const WorkoutList = () => {
       {!isLoading && workouts.length > 0 ? (
         <div className="flex flex-col w-full gap-2">
           {workouts.map((workout, i) => {
-            return <Workout workout={workout} index={i} key={i} />;
+            return <Workout workout={workout} key={i} />;
           })}
         </div>
       ) : null}
