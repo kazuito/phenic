@@ -151,8 +151,7 @@ const WorkoutForm = () => {
                 <Calendar
                   mode="single"
                   selected={state.value}
-                  // onSelect={(date) => handleChange(date as Date)}
-                  initialFocus
+                  onSelect={(date) => handleChange(date as Date)}
                 />
               </PopoverContent>
             </Popover>
