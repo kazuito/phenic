@@ -29,8 +29,6 @@ const app = new Hono().post(
   async (c) => {
     const session = await auth();
 
-    console.log(session);
-
     if (!session || !session?.user || !session.user.id) {
       return c.json({ error: "Unauthorized" }, 401);
     }

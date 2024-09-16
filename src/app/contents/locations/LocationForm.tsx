@@ -61,6 +61,7 @@ const LocationForm = ({ defaultValue, setLocations }: Props) => {
           e.preventDefault();
           handleSubmit();
         }}
+        className="flex flex-col gap-3"
       >
         <Field
           name="name"
@@ -74,12 +75,10 @@ const LocationForm = ({ defaultValue, setLocations }: Props) => {
             />
           )}
         />
-        <div className="flex mt-4">
-          <DialogClose asChild>
-            <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
-              Save
-            </Button>
-          </DialogClose>
+        <div className="flex">
+          <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
+            Save
+          </Button>
         </div>
       </form>
     </div>

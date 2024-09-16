@@ -72,8 +72,6 @@ const WorkForm = (props: Props) => {
           newExerciseType: "STRENGTH",
         },
     onSubmit: async ({ value }) => {
-      console.log(value);
-
       const res = await client.api.set.$post({
         json: {
           exerciseId: value.exerciseId,

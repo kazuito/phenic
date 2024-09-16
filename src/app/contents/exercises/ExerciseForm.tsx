@@ -58,7 +58,7 @@ const ExerciseForm = ({ defaultValue, setExercises }: Props) => {
           e.preventDefault();
           handleSubmit();
         }}
-        className="flex flex-col gap-3 pt-2"
+        className="flex flex-col gap-3"
       >
         <Field
           name="name"
@@ -99,12 +99,10 @@ const ExerciseForm = ({ defaultValue, setExercises }: Props) => {
             </Tabs>
           )}
         />
-        <div className="flex mt-2">
-          <DialogClose asChild>
-            <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
-              {isEdit ? "Update" : "Add"}
-            </Button>
-          </DialogClose>
+        <div className="flex">
+          <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
+            {isEdit ? "Update" : "Add"}
+          </Button>
         </div>
       </form>
     </div>

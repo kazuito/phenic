@@ -86,7 +86,7 @@ const WorkoutForm = () => {
           e.preventDefault();
           handleSubmit();
         }}
-        className="flex flex-col gap-3 pt-2"
+        className="flex flex-col gap-3"
       >
         <Field
           name="locationId"
@@ -161,12 +161,9 @@ const WorkoutForm = () => {
           )}
         />
 
-        <div className="mt-4 flex flex-row justify-between">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-          <Button type="submit" className="gap-1.5" isLoading={isSubmitting}>
-            Add
+        <div className="flex flex-row justify-between">
+          <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
+            Create
           </Button>
         </div>
       </form>
