@@ -51,6 +51,9 @@ const WorkoutForm = () => {
     },
   });
 
+  const isSubmitting = useStore((state) => state.isSubmitting);
+  const selectedLocationId = useStore((state) => state.values.locationId);
+
   const [locations, setLocations] = useState<InferResponseType<
     typeof client.api.location.$get,
     200
@@ -113,7 +116,7 @@ const WorkoutForm = () => {
             </Select>
           )}
         />
-        {useStore((state) => state.values.locationId) === "new" && (
+        {selectedLocationId === "new" && (
           <ExtraSheet className="-mt-2">
             <Field
               name="newLocationName"
@@ -162,7 +165,7 @@ const WorkoutForm = () => {
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
-          <Button type="submit" className="gap-1.5">
+          <Button type="submit" className="gap-1.5" isLoading={isSubmitting}>
             Add
           </Button>
         </div>
