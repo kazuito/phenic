@@ -83,7 +83,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           newExerciseName: value.newExerciseName,
           newExerciseType: value.newExerciseType as ExerciseType,
           workoutId: props.workoutId,
-          setId: props.defaultValues?.id,
+          setId: isEdit ? props.defaultValues?.id : undefined,
         },
       });
 
