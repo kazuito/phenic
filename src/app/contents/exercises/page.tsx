@@ -40,7 +40,7 @@ const Page = () => {
 
   return (
     <div className="">
-      <PageHeader title="Exercises" backHref="/contents" />
+      <PageHeader heading="Exercises" backHref="/contents" />
       <div className="px-4">
         <Dialog>
           <DialogTrigger asChild>

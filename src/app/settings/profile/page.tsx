@@ -14,7 +14,7 @@ const Page = async () => {
 
   return (
     <main className="">
-      <PageHeader title="Profile" backHref="/settings" />
+      <PageHeader heading="Profile" backHref="/settings" />
       <div className="p-4">
         <div className="flex flex-col items-center">
           <Avatar className="size-16">

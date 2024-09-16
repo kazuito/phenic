@@ -33,7 +33,7 @@ const Page = () => {
 
   return (
     <div className="">
-      <PageHeader title="Locations" backHref="/contents" />
+      <PageHeader heading="Locations" backHref="/contents" />
       <div className="px-4">
         <Dialog>
           <DialogTrigger asChild>
