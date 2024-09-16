@@ -13,7 +13,11 @@ const Page = ({}: Props) => {
       <PageHeader title="Settings" hideBack />
       <ListMenu className="px-4">
         <ListMenuGroup>
-          <ListMenuItem heading="Profile" iconName="User" href="/settings/profile" />
+          <ListMenuItem
+            heading="Profile"
+            iconName="User"
+            href="/settings/profile"
+          />
         </ListMenuGroup>
       </ListMenu>
     </div>
