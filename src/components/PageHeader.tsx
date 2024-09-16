@@ -26,7 +26,7 @@ const PageHeader = ({
   const [isScrolled, setIsScrolled] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (value) => {
-    setIsScrolled(value > 8);
+    setIsScrolled(value > 0);
   });
 
   return (
