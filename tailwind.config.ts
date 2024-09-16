@@ -70,11 +70,21 @@ const config: Config = {
       },
       animation: {
         "run-loop": "run 1.95s ease infinite",
+        "fade-up": "fade-up 0.3s ease forwards",
+        "fade-in": "fade-in 0.3s ease forwards",
       },
       keyframes: {
         run: {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
+        },
+        "fade-up": {
+          from: { opacity: "0", transform: "scale(0.95) translateY(1rem)" },
+          to: { opacity: "1", transform: "scale(1) translateY(0)" },
+        },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
       },
     },

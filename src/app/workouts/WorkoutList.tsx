@@ -54,14 +54,14 @@ const WorkoutList = () => {
       {!isLoading && workouts.length > 0 ? (
         <div className="flex flex-col w-full gap-2">
           {workouts.map((workout, i) => {
-            return <Workout workout={workout} key={i} />;
+            return <Workout workout={workout} index={i} key={i} />;
           })}
         </div>
       ) : null}
       <div className="fixed bottom-16 w-full px-4">
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="w-full rounded-full" size="lg">
+            <Button className="w-full rounded-full animate-fade-up" size="lg">
               <Plus className="mr-2" size={16} />
               New Workout
             </Button>
