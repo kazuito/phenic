@@ -38,9 +38,10 @@ type Props = {
     };
   }>;
   isEdit?: boolean;
+  initialOpen?: boolean;
 };
 
-const WorkForm = ({ isEdit = false, ...props }: Props) => {
+const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
   const [exercises, setExercises] = useState<
     InferResponseType<typeof client.api.exercise.$get, 200>
   >([]);
@@ -253,6 +254,7 @@ const WorkForm = ({ isEdit = false, ...props }: Props) => {
         name="exerciseId"
         children={({ state, handleChange, handleBlur }) => (
           <Select
+            defaultOpen={initialOpen}
             defaultValue={state.value === "" ? undefined : state.value}
             onValueChange={(value) => {
               handleChange(value);

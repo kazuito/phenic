@@ -139,7 +139,7 @@ const Sets = ({ workout }: Props) => {
           <DialogHeader>
             <DialogTitle>New Set</DialogTitle>
           </DialogHeader>
-          <WorkForm setSets={setSets} workoutId={workout.id} />
+          <WorkForm setSets={setSets} workoutId={workout.id} initialOpen />
         </DialogContent>
       </Dialog>
     </div>
