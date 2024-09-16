@@ -22,6 +22,9 @@ const Page = async (props: Props) => {
         include: {
           exercise: true,
         },
+        orderBy: {
+          createdAt: "asc",
+        },
       },
     },
   });
