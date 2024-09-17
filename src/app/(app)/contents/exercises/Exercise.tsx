@@ -77,7 +77,11 @@ const Exercise = ({ setExercises, exercise }: Props) => {
           <DialogHeader>
             <DialogTitle>Edit exercise</DialogTitle>
           </DialogHeader>
-          <ExerciseForm setExercises={setExercises} defaultValue={exercise} />
+          <ExerciseForm
+            setExercises={setExercises}
+            defaultValue={exercise}
+            isEdit
+          />
         </DialogContent>
       </Dialog>
     </>

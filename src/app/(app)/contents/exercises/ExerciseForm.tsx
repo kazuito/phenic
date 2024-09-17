@@ -1,23 +1,26 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import client from "@/lib/hono";
+import { ExerciseType } from "@prisma/client";
 import { useForm } from "@tanstack/react-form";
 import { InferResponseType } from "hono";
-import client from "@/lib/hono";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DialogClose } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction } from "react";
-import { ExerciseType } from "@prisma/client";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 type Props = {
   defaultValue?: InferResponseType<typeof client.api.exercise.$get, 200>[0];
   setExercises: Dispatch<
     SetStateAction<InferResponseType<typeof client.api.exercise.$get, 200>>
   >;
+  isEdit?: boolean;
 };
 
-const ExerciseForm = ({ defaultValue, setExercises }: Props) => {
-  const isEdit = defaultValue ? true : false;
-
+const ExerciseForm = ({
+  defaultValue,
+  setExercises,
+  isEdit = false,
+}: Props) => {
   const { Field, handleSubmit, useStore } = useForm({
     defaultValues: defaultValue
       ? {
@@ -31,13 +34,17 @@ const ExerciseForm = ({ defaultValue, setExercises }: Props) => {
     onSubmit: async ({ value }) => {
       const res = await client.api.exercise.$post({
         json: {
-          id: defaultValue?.id ?? "",
+          id: isEdit ? defaultValue?.id : undefined,
           name: value.name,
           type: value.type as ExerciseType,
         },
       });
 
-      if (!res.ok) return;
+      if (!res.ok) {
+        const e = await res.json();
+        toast.error("error" in e ? e.error : "Something went wrong");
+        return;
+      }
 
       const data = await res.json();
 

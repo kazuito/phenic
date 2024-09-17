@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import client from "@/lib/hono";
-import { InferResponseType } from "hono";
+import { ListMenu, ListMenuGroup } from "@/components/myui/list-menu";
 import PageHeader from "@/components/PageHeader";
-import Location from "./Location";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import LocationForm from "./LocationForm";
-import { ListMenu, ListMenuGroup } from "@/components/myui/list-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import client from "@/lib/hono";
+import { InferResponseType } from "hono";
 import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import Location from "./Location";
+import LocationForm from "./LocationForm";
 
 const Page = () => {
   const [locations, setLocations] = useState<

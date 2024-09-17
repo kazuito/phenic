@@ -12,10 +12,7 @@ export const schemas = {
 const app = new Hono()
   .get("/", async (c) => {
     const session = await auth();
-
-    if (!session || !session?.user || !session.user.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
+    if (!session?.user?.id) return c.json({ error: "Unauthorized" }, 401);
 
     const exercises = await prisma.exercise.findMany({
       where: {
@@ -33,22 +30,28 @@ const app = new Hono()
     zValidator(
       "json",
       z.object({
-        id: z.string(),
+        id: z.string().optional(),
         name: z.string(),
         type: z.nativeEnum(ExerciseType),
       })
     ),
     async (c) => {
       const session = await auth();
-
-      if (!session || !session?.user || !session.user.id) {
-        return c.json({ error: "Unauthorized" }, 401);
-      }
-
+      if (!session?.user?.id) return c.json({ error: "Unauthorized" }, 401);
       const body = c.req.valid("json");
 
+      const existingExercise = await prisma.exercise.findFirst({
+        where: {
+          title: body.name,
+          userId: session.user.id,
+        },
+      });
+      if (existingExercise) {
+        return c.json({ error: `${body.name} is already exists` }, 400);
+      }
+
       // Create new exercise
-      if (body.id === "") {
+      if (body.id === undefined) {
         const exercise = await prisma.exercise.create({
           data: {
             title: body.name,
@@ -61,6 +64,7 @@ const app = new Hono()
       }
 
       // Update existing exercise
+      // Users can't update 'type' of exercise
       const exercise = await prisma.exercise.update({
         where: {
           id: body.id,
@@ -84,11 +88,7 @@ const app = new Hono()
     ),
     async (c) => {
       const session = await auth();
-
-      if (!session || !session?.user || !session.user.id) {
-        return c.json({ error: "Unauthorized" }, 401);
-      }
-
+      if (!session?.user?.id) return c.json({ error: "Unauthorized" }, 401);
       const body = c.req.valid("param");
 
       const exercise = await prisma.exercise.delete({
