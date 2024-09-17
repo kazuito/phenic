@@ -18,6 +18,7 @@ import { EllipsisIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import ExerciseForm from "./ExerciseForm";
+import { IconDumbbell } from "@/components/Icon";
 
 type Props = {
   exercise: InferResponseType<typeof client.api.exercise.$get, 200>[0];
@@ -48,6 +49,7 @@ const Exercise = ({ setExercises, exercise }: Props) => {
     <>
       <ListMenuItem
         heading={exercise.title}
+        icon={<IconDumbbell />}
         endContent={
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
