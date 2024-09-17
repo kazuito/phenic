@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 import { notFound } from "next/navigation";
-import Works from "./Sets";
+import Works from "./SetGroups";
 import InfoCard from "./InfoCard";
 import CustomPageHeader from "./CustomPageHeader";
 

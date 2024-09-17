@@ -15,6 +15,7 @@ import { Ellipsis, Plus, X } from "lucide-react";
 import { useState } from "react";
 import WorkForm from "./SetForm";
 import WorkHeader from "./WorkHeader";
+import SetItem from "./SetItem";
 
 type Props = {
   workout: Prisma.WorkoutGetPayload<{
@@ -50,50 +51,13 @@ const Sets = ({ workout }: Props) => {
               <div className="mt-2 flex flex-col">
                 {workGroup.map((set, j) => {
                   return (
-                    <Dialog key={j}>
-                      <DialogTrigger asChild>
-                        <div className="-ml-1.5 cursor-pointer flex items-center gap-1 py-0.5 rounded-md px-1.5">
-                          <div className="tracking-tighter mr-1 size-5 text-sm font-bold bg-black text-white grid place-content-center rounded-md">
-                            {j + 1}
-                          </div>
-                          {set.exercise.type === ExerciseType.STRENGTH ? (
-                            <>
-                              <div className="font-bold text-xl">
-                                {set.weight}kg
-                              </div>
-                              <X size={14} />
-                              <div>{set.reps}</div>
-                            </>
-                          ) : (
-                            <>
-                              <div className="font-bold text-xl">
-                                {set.distance}km
-                              </div>
-                              <Ellipsis size={14} />
-                              <div className="flex items-center gap-0.5">
-                                <div>{Math.floor((set.time ?? 0) / 60)}m</div>
-                                <div>{(set.time ?? 0) % 60}s</div>
-                              </div>
-                            </>
-                          )}
-                          <div className="truncate text-sm ml-2 text-neutral-400">
-                            {set.memo}
-                          </div>
-                        </div>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>{set.exercise.title}</DialogTitle>
-                          <DialogDescription>Set {j + 1}</DialogDescription>
-                        </DialogHeader>
-                        <WorkForm
-                          setSets={setSets}
-                          workoutId={workout.id}
-                          defaultValues={set}
-                          isEdit
-                        />
-                      </DialogContent>
-                    </Dialog>
+                    <SetItem
+                      key={j}
+                      set={set}
+                      indexOfSet={j}
+                      setSets={setSets}
+                      workoutId={workout.id}
+                    />
                   );
                 })}
                 {i === workGroups.length - 1 && (
