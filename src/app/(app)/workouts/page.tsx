@@ -1,15 +1,16 @@
-import { auth, signIn } from "@/lib/auth";
+"use client";
+
+import PageHeader from "@/components/PageHeader";
 import Workouts from "./WorkoutList";
 
-const Home = async () => {
-  const session = await auth();
-
-  if (!session || !session.user || !session.user.email) return signIn();
-
+const Home = () => {
   return (
-    <main>
-      <Workouts />
-    </main>
+    <>
+      <PageHeader heading="Workouts" hideBack />
+      <main>
+        <Workouts />
+      </main>
+    </>
   );
 };
 
