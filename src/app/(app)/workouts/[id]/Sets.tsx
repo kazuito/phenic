@@ -1,7 +1,6 @@
 "use client";
 
-import { ExerciseType, Prisma } from "@prisma/client";
-import WorkHeader from "./WorkHeader";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,11 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import WorkForm from "./SetForm";
-import { catSeries } from "@/lib/utils";
-import { useState } from "react";
+import { catSeries } from "@/lib/utils/utils";
+import { ExerciseType, Prisma } from "@prisma/client";
 import { Ellipsis, Plus, X } from "lucide-react";
+import { useState } from "react";
+import WorkForm from "./SetForm";
+import WorkHeader from "./WorkHeader";
 
 type Props = {
   workout: Prisma.WorkoutGetPayload<{

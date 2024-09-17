@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { ChevronRightIcon, icons } from "lucide-react";
+import { cn } from "@/lib/utils/utils";
+import { ChevronRightIcon } from "lucide-react";
 import { cloneElement } from "react";
 
 type ListMenuProps = {

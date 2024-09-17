@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { CircleAlertIcon } from "lucide-react";
 
 export interface InputProps
@@ -23,7 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
         {error && (
           <div className="mt-1 px-1 text-sm text-destructive flex items-center">
-            <CircleAlertIcon  size={14} className="mr-1.5" />
+            <CircleAlertIcon size={14} className="mr-1.5" />
             {error}
           </div>
         )}
