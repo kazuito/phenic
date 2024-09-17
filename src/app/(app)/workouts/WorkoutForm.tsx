@@ -66,6 +66,8 @@ const WorkoutForm = () => {
       const res = await client.api.location.$get();
 
       if (!res.ok) {
+        const e = await res.json();
+        toast.error("error" in e ? e.error : "Something went wrong");
         return;
       }
       const data = await res.json();

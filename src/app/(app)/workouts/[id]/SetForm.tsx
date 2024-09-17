@@ -90,7 +90,8 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
       });
 
       if (!res.ok) {
-        toast.error(isEdit ? "Failed to update set" : "Failed to add new set");
+        const e = await res.json();
+        toast.error("error" in e ? e.error : "Something went wrong");
         return;
       }
 
