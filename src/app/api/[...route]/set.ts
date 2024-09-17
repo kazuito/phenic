@@ -19,6 +19,7 @@ export const schemas = {
     workoutId: z.string(),
     newExerciseName: z.string(),
     newExerciseType: z.nativeEnum(ExerciseType),
+    newIconName: z.string(),
     setId: z.string().optional(),
   }),
 };
@@ -55,6 +56,7 @@ const app = new Hono().post(
         data: {
           title: body.newExerciseName,
           type: body.newExerciseType,
+          iconName: body.newIconName,
           userId: session.user.id,
         },
       });

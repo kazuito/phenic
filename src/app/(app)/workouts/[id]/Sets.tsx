@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -82,9 +83,8 @@ const Sets = ({ workout }: Props) => {
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>
-                            {set.exercise.title} - Set {j + 1}
-                          </DialogTitle>
+                          <DialogTitle>{set.exercise.title}</DialogTitle>
+                          <DialogDescription>Set {j + 1}</DialogDescription>
                         </DialogHeader>
                         <WorkForm
                           setSets={setSets}

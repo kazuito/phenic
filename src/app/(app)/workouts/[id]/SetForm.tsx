@@ -1,14 +1,21 @@
 "use client";
 
+import IconSelector from "@/components/IconSelector";
 import ExtraSheet from "@/components/myui/extra-sheet";
 import TempMessage from "@/components/TempMessage";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Select,
   SelectContent,
   SelectItem,
+  SelectLabel,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
@@ -64,6 +71,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           time: props.defaultValues.time ?? 0,
           newExerciseName: "",
           newExerciseType: "STRENGTH",
+          newIconName: props.defaultValues.exercise.iconName,
         }
       : {
           exerciseId: "",
@@ -74,6 +82,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           memo: "",
           newExerciseName: "",
           newExerciseType: "STRENGTH",
+          newIconName: "dumbbell",
         },
     onSubmit: async ({ value, formApi }) => {
       const res = await client.api.set.$post({
@@ -86,6 +95,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           memo: value.memo,
           newExerciseName: value.newExerciseName,
           newExerciseType: value.newExerciseType as ExerciseType,
+          newIconName: value.newIconName,
           workoutId: props.workoutId,
           setId: isEdit ? props.defaultValues?.id : undefined,
         },
@@ -261,6 +271,38 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
         handleSubmit();
       }}
     >
+      {values.exerciseId === "new" ? (
+        <Field
+          name="newIconName"
+          children={({ state, handleChange }) => (
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className="cursor-pointer p-2 border border-dashed rounded-lg w-fit mx-auto hover:bg-neutral-50 transition-colors">
+                  {getExerciseIcon(state.value, {
+                    size: 60,
+                  })}
+                </div>
+              </PopoverTrigger>
+              <PopoverContent>
+                <IconSelector
+                  defaultValue={state.value}
+                  value={state.value}
+                  onSelected={handleChange}
+                />
+              </PopoverContent>
+            </Popover>
+          )}
+        />
+      ) : (
+        <div className="p-2 w-fit mx-auto">
+          {getExerciseIcon(
+            exercises.find((e) => e.id === values.exerciseId)?.iconName,
+            {
+              size: 60,
+            }
+          )}
+        </div>
+      )}
       <Field
         name="exerciseId"
         children={({ state, handleChange, handleBlur }) => (
@@ -276,8 +318,16 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
             }}
             disabled={isSubmitting}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Exercise" />
+            <SelectTrigger className="justify-center gap-2">
+              {state.value === "" || state.value === "new" ? (
+                <SelectValue placeholder="Select exercise" />
+              ) : (
+                <SelectValue className="text-center w-full">
+                  <span className="font-semibold">
+                    {exercises.find((e) => e.id === state.value)?.title}
+                  </span>
+                </SelectValue>
+              )}
             </SelectTrigger>
             <SelectContent onBlur={handleBlur}>
               {exercises.map((exercise, i) => {

@@ -5,7 +5,7 @@ export const exerciseIconNames = ["dumbbell", "barbell"] as const;
 export type ExerciseIconName = (typeof exerciseIconNames)[number];
 
 export function getExerciseIcon(
-  name: ExerciseIconName | string,
+  name?: ExerciseIconName | string,
   props?: IconProps
 ) {
   switch (name) {
