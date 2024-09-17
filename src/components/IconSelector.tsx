@@ -17,13 +17,14 @@ const IconSelector = ({ defaultValue, value, onSelected }: Props) => {
 
   useEffect(() => {
     onSelected(selectedIcon);
-  }, [selectedIcon]);
+  }, [selectedIcon, onSelected]);
 
   return (
     <div className="flex">
-      {exerciseIconNames.map((iconName) => {
+      {exerciseIconNames.map((iconName, i) => {
         return (
           <div
+            key={i}
             tabIndex={0}
             className={cn(
               "cursor-pointer size-10 grid place-content-center rounded-sm hover:bg-neutral-100",

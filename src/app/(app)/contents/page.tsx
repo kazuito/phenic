@@ -1,8 +1,4 @@
-import {
-  ListMenu,
-  ListMenuGroup,
-  ListMenuItem,
-} from "@/components/myui/list-menu";
+import { ListMenuGroup, ListMenuItem } from "@/components/myui/list-menu";
 import PageHeader from "@/components/PageHeader";
 import { DumbbellIcon, LandPlotIcon } from "lucide-react";
 

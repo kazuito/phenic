@@ -1,9 +1,11 @@
+import TempMessage from "@/components/TempMessage";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import client from "@/lib/hono";
 import { useForm } from "@tanstack/react-form";
 import { InferResponseType } from "hono";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
@@ -41,7 +43,7 @@ const LocationForm = ({
         return;
       }
 
-      toast.success(`Location ${isEdit ? "updated" : "created"} successfully`);
+      setMessage(isEdit ? "Updated" : "Added");
 
       const data = await res.json();
 
@@ -52,6 +54,8 @@ const LocationForm = ({
       }
     },
   });
+
+  const [message, setMessage] = useState<string | null>();
 
   const isSubmitting = useStore((state) => state.isSubmitting);
 
@@ -77,6 +81,13 @@ const LocationForm = ({
           )}
         />
         <div className="flex">
+          <TempMessage
+            trigger={message}
+            setter={setMessage}
+            className="flex items-center"
+          >
+            <Alert type="inline" color="success" heading={message}></Alert>
+          </TempMessage>
           <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
             {isEdit ? "Update" : "Create"}
           </Button>

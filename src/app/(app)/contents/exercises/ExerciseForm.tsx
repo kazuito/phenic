@@ -1,4 +1,6 @@
 import IconSelector from "@/components/IconSelector";
+import TempMessage from "@/components/TempMessage";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,7 +14,7 @@ import { ExerciseIconName, getExerciseIcon } from "@/lib/utils/getIcon";
 import { ExerciseType } from "@prisma/client";
 import { useForm } from "@tanstack/react-form";
 import { InferResponseType } from "hono";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
@@ -57,6 +59,7 @@ const ExerciseForm = ({
       }
 
       const data = await res.json();
+      setMessage(isEdit ? "Updated" : "Added");
 
       if (isEdit) {
         setExercises((prev) => prev.map((e) => (e.id === data.id ? data : e)));
@@ -65,6 +68,8 @@ const ExerciseForm = ({
       }
     },
   });
+
+  const [message, setMessage] = useState<string | null>(null);
 
   const isSubmitting = useStore((state) => state.isSubmitting);
 
@@ -138,6 +143,13 @@ const ExerciseForm = ({
           )}
         />
         <div className="flex">
+          <TempMessage
+            trigger={message}
+            setter={setMessage}
+            className="flex items-center"
+          >
+            <Alert type="inline" color="success" heading={message}></Alert>
+          </TempMessage>
           <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
             {isEdit ? "Update" : "Add"}
           </Button>

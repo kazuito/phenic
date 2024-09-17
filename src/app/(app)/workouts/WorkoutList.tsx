@@ -61,7 +61,7 @@ const WorkoutList = () => {
         <Dialog>
           <DialogTrigger asChild>
             <Button
-              className="w-full rounded-full animate-fade-up shadow-lg"
+              className="w-full rounded-full animate-fade-in-up shadow-lg"
               size="lg"
             >
               <Plus className="mr-2" size={16} />

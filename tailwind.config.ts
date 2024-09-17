@@ -70,21 +70,36 @@ const config: Config = {
       },
       animation: {
         "run-loop": "run 1.95s ease infinite",
-        "fade-up": "fade-up 0.3s ease forwards",
         "fade-in": "fade-in 0.3s ease forwards",
+        "fade-in-up": "fade-in-up 0.3s ease forwards",
+        "fade-in-down": "fade-in-down 0.3s ease forwards",
+        "fade-out": "fade-out 0.3s ease forwards",
+        "fade-out-down": "fade-out-down 0.3s ease forwards",
       },
       keyframes: {
         run: {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
         },
-        "fade-up": {
-          from: { opacity: "0", transform: "scale(0.95) translateY(1rem)" },
-          to: { opacity: "1", transform: "scale(1) translateY(0)" },
-        },
         "fade-in": {
           from: { opacity: "0" },
           to: { opacity: "1" },
+        },
+        "fade-in-up": {
+          from: { opacity: "0", transform: "scale(0.95) translateY(1rem)" },
+          to: { opacity: "1", transform: "scale(1) translateY(0)" },
+        },
+        "fade-in-down": {
+          from: { opacity: "0", transform: "scale(0.95) translateY(-1rem)" },
+          to: { opacity: "1", transform: "scale(1) translateY(0)" },
+        },
+        "fade-out": {
+          from: { opacity: "1" },
+          to: { opacity: "0" },
+        },
+        "fade-out-down": {
+          from: { opacity: "1", transform: "scale(1) translateY(0)" },
+          to: { opacity: "0", transform: "scale(0.95) translateY(1rem)" },
         },
       },
     },

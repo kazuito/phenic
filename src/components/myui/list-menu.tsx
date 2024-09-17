@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { cn } from "@/lib/utils/utils";
 import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
 import { cloneElement } from "react";
 
 type ListMenuProps = {
@@ -47,8 +47,13 @@ export const ListMenuItem = ({
 }: ListMenuItemProps) => {
   const ItemContent = () => (
     <>
-      {icon && cloneElement(icon, { size: 18, ...icon.props })}
-      {heading}
+      {icon &&
+        cloneElement(icon, {
+          size: 18,
+          ...icon.props,
+          className: cn("shrink-0", icon.props.className),
+        })}
+      <div className="truncate flex gap-3">{heading}</div>
       {endContent && <div className="ml-auto">{endContent}</div>}
     </>
   );

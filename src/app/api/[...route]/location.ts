@@ -42,6 +42,9 @@ const app = new Hono()
       where: {
         name: body.name,
         userId: session.user.id,
+        NOT: {
+          id: body.id,
+        },
       },
     });
     if (existingLocation) {

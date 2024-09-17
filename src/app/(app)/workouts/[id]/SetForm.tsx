@@ -14,10 +14,12 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import client from "@/lib/hono";
+import { getExerciseIcon } from "@/lib/utils/getIcon";
 import { ExerciseType, Prisma } from "@prisma/client";
 import { FieldState, Updater, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { InferResponseType } from "hono";
+import { PlusIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -278,16 +280,25 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
               {exercises.map((exercise, i) => {
                 return (
                   <SelectItem key={i} value={exercise.id}>
-                    {exercise.title}
+                    <div className="flex items-center gap-2">
+                      {getExerciseIcon(exercise.iconName, { size: 18 })}
+                      <span className="font-semibold">{exercise.title}</span>
+                    </div>
                   </SelectItem>
                 );
               })}
               <SelectSeparator />
-              <SelectItem value="new">Add new exercise</SelectItem>
+              <SelectItem value="new">
+                <div className="flex items-center gap-2">
+                  <PlusIcon size={16} />
+                  Add new exercise
+                </div>
+              </SelectItem>
             </SelectContent>
           </Select>
         )}
       />
+
       {values.exerciseId === "new" && (
         <ExtraSheet className="-mt-3">
           <Field
@@ -333,6 +344,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           />
         </ExtraSheet>
       )}
+
       {selectedExerciseType == ExerciseType.STRENGTH ||
       (values.exerciseId === "new" &&
         values.newExerciseType == ExerciseType.STRENGTH) ? (
@@ -423,6 +435,8 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
             onBlur={handleBlur}
             placeholder="Memo"
             disabled={isSubmitting}
+            className="min-h-[42px]"
+            rows={1}
           />
         )}
       />
