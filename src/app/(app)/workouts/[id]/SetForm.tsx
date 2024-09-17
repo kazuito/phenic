@@ -55,7 +55,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           exerciseId: props.defaultValues.exerciseId,
           weight: props.defaultValues.weight ?? 0.0,
           reps: props.defaultValues.reps ?? 0,
-          memo: props.defaultValues.memo,
+          memo: "",
           distance: props.defaultValues.distance ?? 0.0,
           time: props.defaultValues.time ?? 0,
           newExerciseName: "",
@@ -71,7 +71,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           newExerciseName: "",
           newExerciseType: "STRENGTH",
         },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value, formApi }) => {
       const res = await client.api.set.$post({
         json: {
           exerciseId: value.exerciseId,
@@ -120,6 +120,8 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
       } else {
         props.setSets((prev) => [...prev, newSet]);
       }
+
+      formApi.setFieldValue("memo", "");
     },
   });
 
@@ -153,6 +155,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
     }[];
     smallValue: number;
     bigValue: number;
+    disabled?: boolean;
   };
 
   const CustomNumberInput = ({
@@ -162,6 +165,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
     values = [],
     smallValue,
     bigValue,
+    disabled,
   }: CustomNumberInputProps) => {
     return (
       <div className="flex items-center gap-1.5">
@@ -173,7 +177,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           }
           size="icon"
           className="shrink-0"
-          disabled={state.value <= 0}
+          disabled={state.value <= 0 || disabled}
         >
           -{bigValue}
         </Button>
@@ -187,7 +191,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           }
           size="icon"
           className="shrink-0"
-          disabled={state.value <= 0}
+          disabled={state.value <= 0 || disabled}
         >
           -{smallValue}
         </Button>
@@ -226,6 +230,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           onClick={() => handleChange((prev) => prev + smallValue)}
           size="icon"
           className="shrink-0"
+          disabled={disabled}
         >
           +{smallValue}
         </Button>
@@ -235,6 +240,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           onClick={() => handleChange((prev) => prev + bigValue)}
           size="icon"
           className="shrink-0"
+          disabled={disabled}
         >
           +{bigValue}
         </Button>
@@ -263,6 +269,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
                   null
               );
             }}
+            disabled={isSubmitting}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Exercise" />
@@ -292,6 +299,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
                 value={state.value}
                 onChange={(e) => handleChange(e.target.value)}
                 onBlur={handleBlur}
+                disabled={isSubmitting}
               />
             )}
           />
@@ -305,10 +313,18 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
                 onBlur={handleBlur}
               >
                 <TabsList className="w-full">
-                  <TabsTrigger className="grow" value="STRENGTH">
+                  <TabsTrigger
+                    className="grow"
+                    value="STRENGTH"
+                    disabled={isSubmitting}
+                  >
                     Strength
                   </TabsTrigger>
-                  <TabsTrigger className="grow" value="CARDIO">
+                  <TabsTrigger
+                    className="grow"
+                    value="CARDIO"
+                    disabled={isSubmitting}
+                  >
                     Cardio
                   </TabsTrigger>
                 </TabsList>
@@ -331,6 +347,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
                 values={[{ unit: "kg" }]}
                 smallValue={2.5}
                 bigValue={10}
+                disabled={isSubmitting}
               />
             )}
           />
@@ -344,6 +361,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
                 values={[{ unit: "reps" }]}
                 smallValue={1}
                 bigValue={10}
+                disabled={isSubmitting}
               />
             )}
           />
@@ -364,6 +382,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
                 values={[{ unit: "km" }]}
                 smallValue={0.1}
                 bigValue={1}
+                disabled={isSubmitting}
               />
             )}
           />
@@ -388,6 +407,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
                 ]}
                 smallValue={15}
                 bigValue={120}
+                disabled={isSubmitting}
               />
             )}
           />
@@ -402,21 +422,18 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
             onChange={(e) => handleChange(e.target.value)}
             onBlur={handleBlur}
             placeholder="Memo"
+            disabled={isSubmitting}
           />
         )}
       />
 
       <div className="flex flex-row">
         {isEdit && (
-          <Button type="button" variant="destructive">
+          <Button type="button" variant="destructive" disabled={isSubmitting}>
             Delete
           </Button>
         )}
-        <Button
-          type="submit"
-          className="ml-auto gap-1.5"
-          isLoading={isSubmitting}
-        >
+        <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
           {isEdit ? "Update" : "Add"}
         </Button>
       </div>
