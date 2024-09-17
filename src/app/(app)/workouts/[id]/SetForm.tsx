@@ -1,6 +1,8 @@
 "use client";
 
 import ExtraSheet from "@/components/myui/extra-sheet";
+import TempMessage from "@/components/TempMessage";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -95,9 +97,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
         return;
       }
 
-      toast.success(
-        isEdit ? "Updated set successfully" : "Added new set successfully"
-      );
+      setMessage(isEdit ? "Updated" : "Added");
 
       const newSet: Prisma.SetGetPayload<{
         include: {
@@ -127,6 +127,8 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
       formApi.setFieldValue("memo", "");
     },
   });
+
+  const [message, setMessage] = useState<string | null>();
 
   const values = useStore((state) => state.values);
   const isSubmitting = useStore((state) => state.isSubmitting);
@@ -442,13 +444,20 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
         )}
       />
 
-      <div className="flex flex-row">
+      <div className="flex flex-row justify-between">
         {isEdit && (
           <Button type="button" variant="destructive" disabled={isSubmitting}>
             Delete
           </Button>
         )}
-        <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
+        <TempMessage
+          trigger={message}
+          setter={setMessage}
+          className="flex items-center"
+        >
+          <Alert type="inline" color="success" heading={message}></Alert>
+        </TempMessage>
+        <Button type="submit" className="" isLoading={isSubmitting}>
           {isEdit ? "Update" : "Add"}
         </Button>
       </div>
