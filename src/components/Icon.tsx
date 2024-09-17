@@ -1,6 +1,6 @@
 import { cloneElement } from "react";
 
-type IconProps = { size?: number | string } & React.SVGProps<SVGSVGElement>;
+export type IconProps = { size?: number | string } & React.SVGProps<SVGSVGElement>;
 
 const icon = (svg: React.ReactElement) => {
   const IconComponent = (props: IconProps) => {

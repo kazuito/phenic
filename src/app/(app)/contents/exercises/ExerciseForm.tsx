@@ -1,7 +1,14 @@
+import IconSelector from "@/components/IconSelector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import client from "@/lib/hono";
+import { ExerciseIconName, getExerciseIcon } from "@/lib/utils/getIcon";
 import { ExerciseType } from "@prisma/client";
 import { useForm } from "@tanstack/react-form";
 import { InferResponseType } from "hono";
@@ -26,16 +33,19 @@ const ExerciseForm = ({
       ? {
           name: defaultValue.title,
           type: defaultValue.type,
+          iconName: defaultValue.iconName,
         }
       : {
           name: "",
           type: "STRENGTH",
+          iconName: "dumbbell",
         },
     onSubmit: async ({ value }) => {
       const res = await client.api.exercise.$post({
         json: {
           id: isEdit ? defaultValue?.id : undefined,
           name: value.name,
+          iconName: value.iconName,
           type: value.type as ExerciseType,
         },
       });
@@ -67,6 +77,27 @@ const ExerciseForm = ({
         }}
         className="flex flex-col gap-3"
       >
+        <Field
+          name="iconName"
+          children={({ state, handleChange, handleBlur }) => (
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className="cursor-pointer p-2 border border-dashed rounded-lg w-fit mx-auto hover:bg-neutral-50 transition-colors">
+                  {getExerciseIcon(state.value as ExerciseIconName, {
+                    size: 60,
+                  })}
+                </div>
+              </PopoverTrigger>
+              <PopoverContent>
+                <IconSelector
+                  defaultValue={state.value}
+                  value={state.value}
+                  onSelected={handleChange}
+                />
+              </PopoverContent>
+            </Popover>
+          )}
+        />
         <Field
           name="name"
           children={({ state, handleChange, handleBlur }) => (

@@ -7,7 +7,15 @@ import { ExerciseType } from "@prisma/client";
 import { zHandler } from "./zod";
 
 export const schemas = {
-  post: z.object({}),
+  $post: z.object({
+    id: z.string().optional(),
+    name: z
+      .string()
+      .min(1, "Name must be at least 1 character")
+      .max(255, "Name must be at most 255 characters"),
+    iconName: z.string(),
+    type: z.nativeEnum(ExerciseType),
+  }),
 };
 
 const app = new Hono()
@@ -28,65 +36,55 @@ const app = new Hono()
 
     return c.json(exercises);
   })
-  .post(
-    "/",
-    zValidator(
-      "json",
-      z.object({
-        id: z.string().optional(),
-        name: z
-          .string()
-          .min(1, "Name must be at least 1 character")
-          .max(255, "Name must be at most 255 characters"),
-        type: z.nativeEnum(ExerciseType),
-      }),
-      zHandler
-    ),
-    async (c) => {
-      const session = await auth();
-      if (!session?.user?.id) {
-        return c.json({ error: "Unauthorized" }, 401);
-      }
-      const body = c.req.valid("json");
+  .post("/", zValidator("json", schemas.$post, zHandler), async (c) => {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+    const body = c.req.valid("json");
 
-      const existingExercise = await prisma.exercise.findFirst({
-        where: {
-          title: body.name,
-          userId: session.user.id,
-        },
-      });
-      if (existingExercise) {
-        return c.json({ error: `${body.name} is already exists` }, 400);
-      }
-
-      // Create new exercise
-      if (body.id === undefined) {
-        const exercise = await prisma.exercise.create({
-          data: {
-            title: body.name,
-            type: body.type,
-            userId: session.user.id,
-          },
-        });
-
-        return c.json(exercise);
-      }
-
-      // Update existing exercise
-      // Users can't update 'type' of exercise
-      const exercise = await prisma.exercise.update({
-        where: {
+    const existingExercise = await prisma.exercise.findFirst({
+      where: {
+        title: body.name,
+        userId: session.user.id,
+        NOT: {
           id: body.id,
-          userId: session.user.id,
         },
+      },
+    });
+    if (existingExercise) {
+      return c.json({ error: `${body.name} is already exists` }, 400);
+    }
+
+    // Create new exercise
+    if (body.id === undefined) {
+      const exercise = await prisma.exercise.create({
         data: {
           title: body.name,
+          type: body.type,
+          iconName: body.iconName,
+          userId: session.user.id,
         },
       });
 
       return c.json(exercise);
     }
-  )
+
+    // Update existing exercise
+    // Users can't update 'type' of exercise
+    const exercise = await prisma.exercise.update({
+      where: {
+        id: body.id,
+        userId: session.user.id,
+      },
+      data: {
+        title: body.name,
+        iconName: body.iconName,
+      },
+    });
+
+    return c.json(exercise);
+  })
   .get(
     "/delete/:id",
     zValidator(
