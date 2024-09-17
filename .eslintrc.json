@@ -4,6 +4,7 @@
     "@typescript-eslint/no-unused-vars": "warn",
     "react/no-children-prop": "off",
     "react/no-unescaped-entities": "off",
-    "@typescript-eslint/ban-types": "warn"
+    "@typescript-eslint/ban-types": "warn",
+    "curly": ["warn", "all"]
   }
 }

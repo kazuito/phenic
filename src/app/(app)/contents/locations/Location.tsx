@@ -114,7 +114,11 @@ const Location = ({ setLocations, location }: Props) => {
           <DialogHeader>
             <DialogTitle>Edit location</DialogTitle>
           </DialogHeader>
-          <LocationForm setLocations={setLocations} defaultValue={location} />
+          <LocationForm
+            setLocations={setLocations}
+            defaultValue={location}
+            isEdit
+          />
         </DialogContent>
       </Dialog>
     </>

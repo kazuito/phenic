@@ -11,11 +11,14 @@ type Props = {
   setLocations: Dispatch<
     SetStateAction<InferResponseType<typeof client.api.location.$get, 200>>
   >;
+  isEdit?: boolean;
 };
 
-const LocationForm = ({ defaultValue, setLocations }: Props) => {
-  const isEditing = defaultValue ? true : false;
-
+const LocationForm = ({
+  defaultValue,
+  setLocations,
+  isEdit = false,
+}: Props) => {
   const { Field, handleSubmit, useStore } = useForm({
     defaultValues: defaultValue
       ? {
@@ -27,23 +30,22 @@ const LocationForm = ({ defaultValue, setLocations }: Props) => {
     onSubmit: async ({ value }) => {
       const res = await client.api.location.$post({
         json: {
-          id: defaultValue?.id ?? "",
+          id: isEdit ? defaultValue?.id : undefined,
           name: value.name,
         },
       });
 
       if (!res.ok) {
-        toast.error("Failed to save location");
+        const e = await res.json();
+        toast.error("error" in e ? e.error : "Something went wrong");
         return;
       }
 
-      toast.success(
-        `Location ${isEditing ? "updated" : "created"} successfully`
-      );
+      toast.success(`Location ${isEdit ? "updated" : "created"} successfully`);
 
       const data = await res.json();
 
-      if (isEditing) {
+      if (isEdit) {
         setLocations((prev) => prev.map((e) => (e.id === data.id ? data : e)));
       } else {
         setLocations((prev) => [data, ...prev]);
@@ -76,7 +78,7 @@ const LocationForm = ({ defaultValue, setLocations }: Props) => {
         />
         <div className="flex">
           <Button type="submit" className="ml-auto" isLoading={isSubmitting}>
-            Save
+            {isEdit ? "Update" : "Create"}
           </Button>
         </div>
       </form>

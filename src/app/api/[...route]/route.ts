@@ -1,9 +1,10 @@
-import { Hono } from "hono";
+import { Context, Env, Hono } from "hono";
 import { handle } from "hono/vercel";
 import set from "./set";
 import workout from "./workout";
 import exercise from "./exercise";
 import location from "./location";
+import { z } from "zod";
 
 // export const runtime = "edge";
 
@@ -18,3 +19,5 @@ export type AppType = typeof routes;
 
 export const GET = handle(app);
 export const POST = handle(app);
+
+
