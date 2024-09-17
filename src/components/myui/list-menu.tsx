@@ -47,7 +47,7 @@ export const ListMenuItem = ({
 }: ListMenuItemProps) => {
   const ItemContent = () => (
     <>
-      {icon && cloneElement(icon, { size: 18 })}
+      {icon && cloneElement(icon, { size: 18, ...icon.props })}
       {heading}
       {endContent && <div className="ml-auto">{endContent}</div>}
     </>
