@@ -1,10 +1,9 @@
-import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { getUserId } from "@/lib/server/hono";
+import { zHandler } from "@/lib/server/zod";
+import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
-import { zValidator } from "@hono/zod-validator";
-import { zHandler } from "@/lib/server/zod";
-import { getUserId } from "@/lib/server/hono";
 
 export const schemas = {
   $post: z.object({

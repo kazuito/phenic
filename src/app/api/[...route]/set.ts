@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
@@ -117,8 +116,18 @@ const app = new Hono()
 
     return c.json(newWork);
   })
-  .delete("/:id", zValidator("param", schemas.delete), async (c) => {
-    const params = c.req.valid("param");
+  .delete("/:id", async (c) => {
+    const { id } = c.req.param();
+    const userId = getUserId();
+
+    const deletedSet = await prisma.set.delete({
+      where: {
+        id: id,
+        userId: userId,
+      },
+    });
+
+    return c.json(deletedSet);
   });
 
 export default app;

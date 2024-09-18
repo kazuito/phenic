@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import { Hono } from "hono";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";

@@ -90,6 +90,10 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
             defaultValues={set}
             exercises={exercises}
             isEdit
+            onDelete={(deletedSetId) => {
+              setSets((prev) => prev.filter((s) => s.id !== deletedSetId));
+              setIsEditing(false);
+            }}
           />
         ) : (
           <SetView set={set} />

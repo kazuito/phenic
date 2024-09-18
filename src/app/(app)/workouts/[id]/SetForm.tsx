@@ -5,6 +5,7 @@ import ExtraSheet from "@/components/myui/extra-sheet";
 import TempMessage from "@/components/TempMessage";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -50,9 +51,15 @@ type Props = {
   isEdit?: boolean;
   initialOpen?: boolean;
   exercises: InferResponseType<typeof client.api.exercise.$get, 200>;
+  onDelete?: (setId: string) => void;
 };
 
-const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
+const WorkForm = ({
+  isEdit = false,
+  initialOpen = false,
+  onDelete,
+  ...props
+}: Props) => {
   const [exercises, setExercises] = useState<
     InferResponseType<typeof client.api.exercise.$get, 200>
   >(props.exercises);
@@ -160,6 +167,22 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
   useEffect(() => {
     fetchExercises();
   }, []);
+
+  const deleteSet = async () => {
+    const res = await client.api.set[":id"].$delete({
+      param: {
+        id: props.defaultValues?.id ?? "",
+      },
+    });
+    if (!res.ok) {
+      return;
+    }
+    const deletedSet = await res.json();
+    onDelete?.(deletedSet.id);
+    toast.success(
+      `${props.defaultValues?.exercise.title ?? "Exercise"} Deleted`,
+    );
+  };
 
   type CustomNumberInputProps = {
     state: FieldState<number>;
@@ -498,9 +521,16 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
 
       <div className="flex flex-row justify-between">
         {isEdit && (
-          <Button type="button" variant="destructive" disabled={isSubmitting}>
-            Delete
-          </Button>
+          <DialogClose>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => deleteSet()}
+              disabled={isSubmitting}
+            >
+              Delete
+            </Button>
+          </DialogClose>
         )}
         <TempMessage
           trigger={message}
