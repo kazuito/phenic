@@ -30,7 +30,13 @@ const app = new Hono()
         userId: session.user.id,
       },
       orderBy: {
-        createdAt: "desc",
+        title: "asc",
+      },
+      select: {
+        title: true,
+        type: true,
+        id: true,
+        iconName: true,
       },
     });
 

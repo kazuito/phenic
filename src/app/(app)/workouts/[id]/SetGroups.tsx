@@ -4,18 +4,19 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import client from "@/lib/hono";
 import { catSeries } from "@/lib/utils/utils";
-import { ExerciseType, Prisma } from "@prisma/client";
-import { Ellipsis, Plus, X } from "lucide-react";
-import { useState } from "react";
+import { Prisma } from "@prisma/client";
+import { InferResponseType } from "hono";
+import { Plus } from "lucide-react";
+import { createContext, useEffect, useState } from "react";
 import WorkForm from "./SetForm";
-import WorkHeader from "./WorkHeader";
 import SetItem from "./SetItem";
+import WorkHeader from "./WorkHeader";
 
 type Props = {
   workout: Prisma.WorkoutGetPayload<{
@@ -38,6 +39,23 @@ const Sets = ({ workout }: Props) => {
     }>[]
   >(workout.sets);
 
+  const [exercises, setExercises] = useState<
+    InferResponseType<typeof client.api.exercise.$get, 200>
+  >([]);
+
+  const fetchExercises = async () => {
+    const res = await client.api.exercise.$get();
+    if (!res.ok) {
+      return;
+    }
+    const exercises = await res.json();
+    setExercises(exercises);
+  };
+
+  useEffect(() => {
+    fetchExercises();
+  }, []);
+
   const workGroups = catSeries(sets, (set) => set.exercise.title);
 
   return (
@@ -57,6 +75,7 @@ const Sets = ({ workout }: Props) => {
                       indexOfSet={j}
                       setSets={setSets}
                       workoutId={workout.id}
+                      exercises={exercises}
                     />
                   );
                 })}
@@ -80,6 +99,7 @@ const Sets = ({ workout }: Props) => {
                         setSets={setSets}
                         workoutId={workout.id}
                         defaultValues={workGroup[workGroup.length - 1]}
+                        exercises={exercises}
                       />
                     </DialogContent>
                   </Dialog>
@@ -103,7 +123,12 @@ const Sets = ({ workout }: Props) => {
           <DialogHeader>
             <DialogTitle>New Set</DialogTitle>
           </DialogHeader>
-          <WorkForm setSets={setSets} workoutId={workout.id} initialOpen />
+          <WorkForm
+            setSets={setSets}
+            workoutId={workout.id}
+            exercises={exercises}
+            initialOpen
+          />
         </DialogContent>
       </Dialog>
     </div>

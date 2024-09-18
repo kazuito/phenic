@@ -15,7 +15,6 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectLabel,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
@@ -50,14 +49,17 @@ type Props = {
   }>;
   isEdit?: boolean;
   initialOpen?: boolean;
+  exercises: InferResponseType<typeof client.api.exercise.$get, 200>;
 };
 
 const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
   const [exercises, setExercises] = useState<
     InferResponseType<typeof client.api.exercise.$get, 200>
-  >([]);
+  >(props.exercises);
   const [selectedExerciseType, setSelectedExerciseType] =
-    useState<ExerciseType | null>(props.defaultValues?.exercise.type ?? null);
+    useState<ExerciseType | null>(
+      props.defaultValues?.exercise.type ?? exercises[0]?.type ?? null
+    );
 
   const { Field, handleSubmit, useStore } = useForm({
     validatorAdapter: zodValidator(),
@@ -74,7 +76,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           newIconName: props.defaultValues.exercise.iconName,
         }
       : {
-          exerciseId: "",
+          exerciseId: exercises[0]?.id ?? "",
           weight: 0.0,
           reps: 0,
           distance: 0.0,

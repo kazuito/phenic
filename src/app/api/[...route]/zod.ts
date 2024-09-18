@@ -9,7 +9,7 @@ export const zHandler = <
   if (!result.success) {
     return c.json(
       {
-        message: result?.error?.issues?.[0]?.message ?? "Something went wrong",
+        error: result?.error?.issues?.[0]?.message ?? "Something went wrong",
       },
       400
     );

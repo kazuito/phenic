@@ -10,8 +10,10 @@ import {
 import { ExerciseType, Prisma } from "@prisma/client";
 import { EllipsisIcon, XIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
-import WorkForm from "./SetForm";
+import SetForm from "./SetForm";
 import SetView from "./SetView";
+import { InferResponseType } from "hono";
+import client from "@/lib/hono";
 
 type Props = {
   indexOfSet: number;
@@ -29,10 +31,11 @@ type Props = {
       }>[]
     >
   >;
+  exercises: InferResponseType<typeof client.api.exercise.$get, 200>;
   workoutId: string;
 };
 
-const SetItem = ({ indexOfSet, set, setSets, workoutId }: Props) => {
+const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -77,10 +80,11 @@ const SetItem = ({ indexOfSet, set, setSets, workoutId }: Props) => {
           {isEditing ? "Cancel" : "Edit"}
         </Button>
         {isEditing ? (
-          <WorkForm
+          <SetForm
             setSets={setSets}
             workoutId={workoutId}
             defaultValues={set}
+            exercises={exercises}
             isEdit
           />
         ) : (
