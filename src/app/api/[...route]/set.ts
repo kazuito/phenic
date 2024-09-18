@@ -1,9 +1,10 @@
-import { prisma } from "../../../lib/prisma";
-import { auth } from "../../../lib/auth";
+import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { ExerciseType } from "@prisma/client";
+import { getUserId } from "@/lib/server/hono";
 
 export const schemas = {
   post: z.object({
@@ -22,19 +23,15 @@ export const schemas = {
     newIconName: z.string(),
     setId: z.string().optional(),
   }),
+  delete: z.object({
+    id: z.string(),
+  }),
 };
 
-const app = new Hono().post(
-  "/",
-  zValidator("json", schemas.post),
-  async (c) => {
-    const session = await auth();
-
-    if (!session || !session?.user || !session.user.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-
+const app = new Hono()
+  .post("/", zValidator("json", schemas.post), async (c) => {
     const body = c.req.valid("json");
+    const userId = getUserId();
     let exerciseType = body.newExerciseType;
 
     // Create new exercise
@@ -45,7 +42,7 @@ const app = new Hono().post(
       const existingExercise = await prisma.exercise.findFirst({
         where: {
           title: body.newExerciseName,
-          userId: session.user.id,
+          userId: userId,
         },
       });
       if (existingExercise) {
@@ -57,7 +54,7 @@ const app = new Hono().post(
           title: body.newExerciseName,
           type: body.newExerciseType,
           iconName: body.newIconName,
-          userId: session.user.id,
+          userId: userId,
         },
       });
       body.exerciseId = newExercise.id;
@@ -65,7 +62,7 @@ const app = new Hono().post(
       const exercise = await prisma.exercise.findUnique({
         where: {
           id: body.exerciseId,
-          userId: session.user.id,
+          userId: userId,
         },
       });
       if (!exercise) {
@@ -79,7 +76,7 @@ const app = new Hono().post(
       const updatedWork = await prisma.set.update({
         where: {
           id: body.setId,
-          userId: session.user.id,
+          userId: userId,
         },
         data: {
           exerciseId: body.exerciseId,
@@ -102,7 +99,7 @@ const app = new Hono().post(
     // Create new set
     const newWork = await prisma.set.create({
       data: {
-        userId: session.user.id,
+        userId: userId,
         exerciseId: body.exerciseId,
         weight:
           exerciseType === ExerciseType.STRENGTH ? body.weight : undefined,
@@ -119,7 +116,9 @@ const app = new Hono().post(
     });
 
     return c.json(newWork);
-  },
-);
+  })
+  .delete("/:id", zValidator("param", schemas.delete), async (c) => {
+    const params = c.req.valid("param");
+  });
 
 export default app;

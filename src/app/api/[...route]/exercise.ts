@@ -1,10 +1,11 @@
-import { auth } from "../../../lib/auth";
+import { auth } from "@/lib/auth";
 import { Hono } from "hono";
 import { z } from "zod";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { zValidator } from "@hono/zod-validator";
 import { ExerciseType, Prisma } from "@prisma/client";
-import { zHandler } from "./zod";
+import { zHandler } from "@/lib/server/zod";
+import { getUserId } from "@/lib/server/hono";
 
 export const schemas = {
   $post: z.object({
@@ -32,14 +33,10 @@ const minimalExerciseSelect: Partial<Prisma.ExerciseSelect> = {
 
 const app = new Hono()
   .get("/", async (c) => {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-
+    const userId = getUserId();
     const exercises = await prisma.exercise.findMany({
       where: {
-        userId: session.user.id,
+        userId: userId,
       },
       orderBy: {
         title: "asc",
@@ -50,16 +47,13 @@ const app = new Hono()
     return c.json(exercises);
   })
   .post("/", zValidator("json", schemas.$post, zHandler), async (c) => {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
     const body = c.req.valid("json");
+    const userId = getUserId();
 
     const existingExercise = await prisma.exercise.findFirst({
       where: {
         title: body.name,
-        userId: session.user.id,
+        userId: userId,
         NOT: {
           id: body.id,
         },
@@ -77,7 +71,7 @@ const app = new Hono()
           title: body.name,
           type: body.type,
           iconName: body.iconName,
-          userId: session.user.id,
+          userId: userId,
         },
         select: basicExerciseSelect,
       });
@@ -90,7 +84,7 @@ const app = new Hono()
     const exercise = await prisma.exercise.update({
       where: {
         id: body.id,
-        userId: session.user.id,
+        userId: userId,
       },
       data: {
         title: body.name,
@@ -111,16 +105,13 @@ const app = new Hono()
       zHandler,
     ),
     async (c) => {
-      const session = await auth();
-      if (!session?.user?.id) {
-        return c.json({ error: "Unauthorized" }, 401);
-      }
       const body = c.req.valid("param");
+      const userId = getUserId();
 
       const exercise = await prisma.exercise.delete({
         where: {
           id: body.id,
-          userId: session.user.id,
+          userId: userId,
         },
         select: minimalExerciseSelect,
       });

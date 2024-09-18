@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils/utils";
 import { DumbbellIcon, NotebookTabsIcon, SettingsIcon } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cloneElement } from "react";
 
 const NavBar = () => {

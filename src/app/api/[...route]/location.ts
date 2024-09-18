@@ -1,9 +1,10 @@
-import { auth } from "../../../lib/auth";
+import { auth } from "@/lib/auth";
 import { Hono } from "hono";
 import { z } from "zod";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { zValidator } from "@hono/zod-validator";
-import { zHandler } from "./zod";
+import { zHandler } from "@/lib/server/zod";
+import { getUserId } from "@/lib/server/hono";
 
 export const schemas = {
   $post: z.object({
@@ -17,31 +18,23 @@ export const schemas = {
 
 const app = new Hono()
   .get("/", async (c) => {
-    const session = await auth();
-
-    if (!session || !session?.user || !session.user.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-
+    const userId = getUserId();
     const locations = await prisma.location.findMany({
       where: {
-        userId: session.user.id,
+        userId: userId,
       },
     });
 
     return c.json(locations ?? []);
   })
   .post("/", zValidator("json", schemas.$post, zHandler), async (c) => {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
     const body = c.req.valid("json");
+    const userId = getUserId();
 
     const existingLocation = await prisma.location.findFirst({
       where: {
         name: body.name,
-        userId: session.user.id,
+        userId: userId,
         NOT: {
           id: body.id,
         },
@@ -56,7 +49,7 @@ const app = new Hono()
       const location = await prisma.location.create({
         data: {
           name: body.name,
-          userId: session.user.id,
+          userId: userId,
         },
       });
 
@@ -67,7 +60,7 @@ const app = new Hono()
     const location = await prisma.location.update({
       where: {
         id: body.id,
-        userId: session.user.id,
+        userId: userId,
       },
       data: {
         name: body.name,
@@ -86,15 +79,13 @@ const app = new Hono()
       zHandler,
     ),
     async (c) => {
-      const session = await auth();
-      if (!session?.user?.id) {
-        return c.json({ error: "Unauthorized" }, 401);
-      }
       const body = c.req.valid("param");
+      const userId = getUserId();
 
       const location = await prisma.location.delete({
         where: {
           id: body.id,
+          userId: userId,
         },
       });
 
@@ -111,17 +102,12 @@ const app = new Hono()
       zHandler,
     ),
     async (c) => {
-      const session = await auth();
-
-      if (!session || !session?.user || !session.user.id) {
-        return c.json({ error: "Unauthorized" }, 401);
-      }
-
       const body = c.req.valid("param");
+      const userId = getUserId();
 
       await prisma.location.updateMany({
         where: {
-          userId: session.user.id,
+          userId: userId,
           isDefault: true,
         },
         data: {
@@ -132,7 +118,7 @@ const app = new Hono()
       const location = await prisma.location.update({
         where: {
           id: body.id,
-          userId: session.user.id,
+          userId: userId,
         },
         data: {
           isDefault: true,

@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { auth } from "../../../lib/auth";
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
+import { getUserId } from "@/lib/server/hono";
 
 export const schemas = {
   $post: z.object({
@@ -22,15 +22,10 @@ export const schemas = {
 const app = new Hono()
   // get all workout
   .get("/", async (c) => {
-    const session = await auth();
-
-    if (!session || !session?.user || !session.user.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-
+    const userId = getUserId();
     const workouts = await prisma.workout.findMany({
       where: {
-        userId: session.user.id,
+        userId: userId,
       },
       include: {
         sets: {
@@ -52,12 +47,6 @@ const app = new Hono()
   })
   // get workout by id
   .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
-    const session = await auth();
-
-    if (!session || !session?.user || !session.user.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-
     const params = c.req.valid("param");
 
     const workout = await prisma.workout.findUnique({
@@ -85,13 +74,8 @@ const app = new Hono()
   })
   // create new workout
   .post("/", zValidator("json", schemas.$post), async (c) => {
-    const session = await auth();
-
-    if (!session || !session?.user || !session.user.id) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-
     const body = c.req.valid("json");
+    const userId = getUserId();
 
     let locationId = body.locationId;
 
@@ -99,7 +83,7 @@ const app = new Hono()
       const newLocation = await prisma.location.create({
         data: {
           name: body.newLocationName,
-          userId: session.user.id,
+          userId: userId,
         },
       });
 
@@ -109,7 +93,7 @@ const app = new Hono()
     const newWorkout = await prisma.workout.create({
       data: {
         date: new Date(body.date),
-        userId: session.user.id,
+        userId: userId,
         locationId: locationId,
       },
       include: {
@@ -128,17 +112,13 @@ const app = new Hono()
     "/delete/:id",
     zValidator("param", z.object({ id: z.string() })),
     async (c) => {
-      const session = await auth();
-      if (!session || !session?.user || !session.user.id) {
-        return c.json({ error: "Unauthorized" }, 401);
-      }
-
       const params = c.req.valid("param");
+      const userId = getUserId();
 
       const workout = await prisma.workout.delete({
         where: {
           id: params.id,
-          userId: session.user.id,
+          userId: userId,
         },
       });
 
