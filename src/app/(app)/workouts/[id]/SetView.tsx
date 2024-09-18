@@ -1,7 +1,7 @@
 import { getExerciseIcon } from "@/lib/utils/getIcon";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
-import { SlashIcon } from "lucide-react";
+import { CalendarIcon, SlashIcon } from "lucide-react";
 
 type Props = {
   set: Prisma.SetGetPayload<{
@@ -19,7 +19,7 @@ const SetView = ({ set }: Props) => {
           size: 60,
         })}
       </div>
-      <div className="mt-6 flex items-center gap-3">
+      <div className="mt-4 flex items-center gap-3">
         {set.exercise.type === "STRENGTH" ? (
           <>
             <div className="flex items-baseline gap-1.5">
@@ -54,8 +54,17 @@ const SetView = ({ set }: Props) => {
           </>
         )}
       </div>
-      <div className="mt-6 text-sm text-muted-foreground">
-        {dayjs(set.createdAt).format("ddd MMM DD, YYYY - HH:mm")}
+      <div className="mt-6">
+        {set.memo && (
+          <div className="mx-auto w-fit rounded-lg bg-muted px-3 py-1.5 text-sm">
+            {set.memo}
+          </div>
+        )}
+        <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
+          <CalendarIcon size={16} />
+          <span>{dayjs(set.createdAt).format("ddd MMM DD, YYYY")}</span>
+          <span>{dayjs(set.createdAt).format("HH:mm")}</span>
+        </div>
       </div>
     </div>
   );

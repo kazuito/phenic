@@ -68,7 +68,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           exerciseId: props.defaultValues.exerciseId,
           weight: props.defaultValues.weight ?? 0.0,
           reps: props.defaultValues.reps ?? 0,
-          memo: "",
+          memo: isEdit ? props.defaultValues.memo : "",
           distance: props.defaultValues.distance ?? 0.0,
           time: props.defaultValues.time ?? 0,
           newExerciseName: "",
