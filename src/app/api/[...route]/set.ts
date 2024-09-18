@@ -119,7 +119,7 @@ const app = new Hono().post(
     });
 
     return c.json(newWork);
-  }
+  },
 );
 
 export default app;

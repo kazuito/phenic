@@ -143,7 +143,7 @@ const app = new Hono()
       });
 
       return c.json(workout);
-    }
+    },
   );
 
 export default app;

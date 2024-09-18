@@ -39,9 +39,9 @@ const WorkoutList = () => {
   return (
     <div className="flex flex-col items-center px-4">
       {isLoading && (
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex w-full flex-col gap-2">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton className="h-24 w-full rounded-xl shrink-0" key={i} />
+            <Skeleton className="h-24 w-full shrink-0 rounded-xl" key={i} />
           ))}
         </div>
       )}
@@ -51,17 +51,17 @@ const WorkoutList = () => {
         </div>
       ) : null}
       {!isLoading && workouts.length > 0 ? (
-        <div className="flex flex-col w-full gap-2">
+        <div className="flex w-full flex-col gap-2">
           {workouts.map((workout, i) => {
             return <Workout workout={workout} key={i} />;
           })}
         </div>
       ) : null}
-      <div className="sticky mt-4 bottom-16 w-full md:bottom-4">
+      <div className="sticky bottom-16 mt-4 w-full md:bottom-4">
         <Dialog>
           <DialogTrigger asChild>
             <Button
-              className="w-full rounded-full animate-fade-in-up shadow-lg"
+              className="w-full animate-fade-in-up rounded-full shadow-lg"
               size="lg"
             >
               <Plus className="mr-2" size={16} />

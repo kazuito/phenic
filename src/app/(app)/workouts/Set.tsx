@@ -10,7 +10,7 @@ const Work = ({ work }: Props) => {
   return (
     <div className="">
       <div className="font-semibold">{work.exercise.title}</div>
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1">
         <div>{work.weight}kg</div>
         <div>
           <X size={14} />

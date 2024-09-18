@@ -32,15 +32,15 @@ const PageHeader = ({
   return (
     <div
       className={cn(
-        "sticky bg-white top-0 px-4 transition-all",
-        (isScrolled || alwaysShowBorder) && "border-b"
+        "sticky top-0 bg-white px-4 transition-all",
+        (isScrolled || alwaysShowBorder) && "border-b",
       )}
     >
-      <div className="flex h-14 items-center relative">
+      <div className="relative flex h-14 items-center">
         {hideBack ? null : (
           <Link
             href={backHref}
-            className="group flex items-center gap-1 absolute left-0 text-blue-500"
+            className="group absolute left-0 flex items-center gap-1 text-blue-500"
           >
             <div className="">←</div>
             <div>{backText}</div>

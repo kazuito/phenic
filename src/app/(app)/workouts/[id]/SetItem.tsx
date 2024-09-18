@@ -42,20 +42,20 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
   return (
     <Dialog onOpenChange={(open) => setIsEditing(open && isEditing)}>
       <DialogTrigger asChild>
-        <div className="-ml-1.5 cursor-pointer flex items-center gap-1.5 py-0.5 rounded-md px-1.5 has-[+button]:animate-new-item">
-          <div className="tracking-tighter mr-1 size-5 text-sm text-white bg-black font-bold grid place-content-center rounded-md">
+        <div className="-ml-1.5 flex cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-0.5 has-[+button]:animate-new-item">
+          <div className="mr-1 grid size-5 place-content-center rounded-md bg-black text-sm font-bold tracking-tighter text-white">
             {indexOfSet + 1}
           </div>
           <div className="flex items-center gap-1">
             {set.exercise.type === ExerciseType.STRENGTH ? (
               <>
-                <div className="font-bold text-xl">{set.weight}kg</div>
+                <div className="text-xl font-bold">{set.weight}kg</div>
                 <XIcon size={14} />
                 <div>{set.reps}</div>
               </>
             ) : (
               <>
-                <div className="font-bold text-xl">{set.distance}km</div>
+                <div className="text-xl font-bold">{set.distance}km</div>
                 <EllipsisIcon size={14} />
                 <div className="flex items-center gap-0.5">
                   <div>{Math.floor((set.time ?? 0) / 60)}m</div>
@@ -64,10 +64,10 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
               </>
             )}
           </div>
-          <div className="truncate text-sm ml-2 text-neutral-400">
+          <div className="ml-2 truncate text-sm text-neutral-400">
             {set.memo}
           </div>
-          <div className="text-xs text-neutral-400 ml-auto">
+          <div className="ml-auto text-xs text-neutral-400">
             {dayjs(set.createdAt).format("HH:mm")}
           </div>
         </div>

@@ -63,7 +63,7 @@ const Alert = React.forwardRef<
       hideIcon,
       ...props
     },
-    ref
+    ref,
   ) => (
     <div
       ref={ref}
@@ -74,18 +74,18 @@ const Alert = React.forwardRef<
       <div
         className={cn(
           "flex items-center",
-          type === "inline" ? "gap-1.5" : "gap-2"
+          type === "inline" ? "gap-1.5" : "gap-2",
         )}
       >
         {!hideIcon &&
           React.cloneElement(icon ?? icons[color ?? "default"], {
             size: type === "inline" ? 14 : 16,
           })}
-        <div className="leading-none font-semibold">{heading}</div>
+        <div className="font-semibold leading-none">{heading}</div>
       </div>
       {children && <div>{children}</div>}
     </div>
-  )
+  ),
 );
 Alert.displayName = "Alert";
 

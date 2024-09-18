@@ -87,7 +87,7 @@ const ExerciseForm = ({
           children={({ state, handleChange, handleBlur }) => (
             <Popover>
               <PopoverTrigger asChild>
-                <div className="cursor-pointer p-2 border border-dashed rounded-lg w-fit mx-auto hover:bg-neutral-50 transition-colors">
+                <div className="mx-auto w-fit cursor-pointer rounded-lg border border-dashed p-2 transition-colors hover:bg-neutral-50">
                   {getExerciseIcon(state.value, {
                     size: 60,
                   })}

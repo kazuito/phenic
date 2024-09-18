@@ -53,14 +53,14 @@ export const ListMenuItem = ({
           ...icon.props,
           className: cn("shrink-0", icon.props.className),
         })}
-      <div className="truncate flex gap-3">{heading}</div>
+      <div className="flex gap-3 truncate">{heading}</div>
       {endContent && <div className="ml-auto">{endContent}</div>}
     </>
   );
 
   const wrapperClassName = cn(
     "p-4 h-[57px] flex items-center gap-3 last:border-none last:h-[56px] border-b",
-    className
+    className,
   );
 
   if (!href) {

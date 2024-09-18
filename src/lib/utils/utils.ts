@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function catSeries<T>(
   items: T[],
-  catBy: keyof T | ((item: T) => unknown)
+  catBy: keyof T | ((item: T) => unknown),
 ) {
   const groups: T[][] = [];
   let group: T[] = [];

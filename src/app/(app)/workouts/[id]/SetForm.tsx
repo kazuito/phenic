@@ -58,7 +58,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
   >(props.exercises);
   const [selectedExerciseType, setSelectedExerciseType] =
     useState<ExerciseType | null>(
-      props.defaultValues?.exercise.type ?? exercises[0]?.type ?? null
+      props.defaultValues?.exercise.type ?? exercises[0]?.type ?? null,
     );
 
   const { Field, handleSubmit, useStore } = useForm({
@@ -130,7 +130,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
 
       if (isEdit) {
         props.setSets((prev) =>
-          prev.map((s) => (s.id === newSet.id ? newSet : s))
+          prev.map((s) => (s.id === newSet.id ? newSet : s)),
         );
       } else {
         props.setSets((prev) => [...prev, newSet]);
@@ -203,7 +203,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           variant="outline"
           onClick={() =>
             handleChange((prev) =>
-              prev - smallValue >= 0 ? prev - smallValue : 0
+              prev - smallValue >= 0 ? prev - smallValue : 0,
             )
           }
           size="icon"
@@ -212,14 +212,14 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
         >
           -{smallValue}
         </Button>
-        <div className="grow flex justify-center items-center -space-x-1">
+        <div className="flex grow items-center justify-center -space-x-1">
           {values.map((value, i) => {
             const outValue = value.out ? value.out(state.value) : state.value;
             return (
               <div key={i} className="flex items-baseline -space-x-1">
                 <Input
                   type="number"
-                  className="bg-transparent border-none text-3xl font-bold text-center p-0"
+                  className="border-none bg-transparent p-0 text-center text-3xl font-bold"
                   value={outValue}
                   onChange={(e) =>
                     handleChange(() => {
@@ -279,7 +279,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           children={({ state, handleChange }) => (
             <Popover>
               <PopoverTrigger asChild>
-                <div className="cursor-pointer p-2 border border-dashed rounded-lg w-fit mx-auto hover:bg-neutral-50 transition-colors">
+                <div className="mx-auto w-fit cursor-pointer rounded-lg border border-dashed p-2 transition-colors hover:bg-neutral-50">
                   {getExerciseIcon(state.value, {
                     size: 60,
                   })}
@@ -296,12 +296,12 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
           )}
         />
       ) : (
-        <div className="p-2 w-fit mx-auto">
+        <div className="mx-auto w-fit p-2">
           {getExerciseIcon(
             exercises.find((e) => e.id === values.exerciseId)?.iconName,
             {
               size: 60,
-            }
+            },
           )}
         </div>
       )}
@@ -315,7 +315,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
               handleChange(value);
               setSelectedExerciseType(
                 exercises.find((exercise) => exercise.id === value)?.type ??
-                  null
+                  null,
               );
             }}
             disabled={isSubmitting}
@@ -324,7 +324,7 @@ const WorkForm = ({ isEdit = false, initialOpen = false, ...props }: Props) => {
               {state.value === "" || state.value === "new" ? (
                 <SelectValue placeholder="Select exercise" />
               ) : (
-                <SelectValue className="text-center w-full">
+                <SelectValue className="w-full text-center">
                   <span className="font-semibold">
                     {exercises.find((e) => e.id === state.value)?.title}
                   </span>

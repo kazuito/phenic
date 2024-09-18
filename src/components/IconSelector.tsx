@@ -27,8 +27,8 @@ const IconSelector = ({ defaultValue, value, onSelected }: Props) => {
             key={i}
             tabIndex={0}
             className={cn(
-              "cursor-pointer size-10 grid place-content-center rounded-sm hover:bg-neutral-100",
-              iconName === selectedIcon ? "outline z-10" : ""
+              "grid size-10 cursor-pointer place-content-center rounded-sm hover:bg-neutral-100",
+              iconName === selectedIcon ? "z-10 outline" : "",
             )}
             onClick={() => {
               setSelectedIcon(iconName);

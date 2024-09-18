@@ -13,20 +13,20 @@ const Workout = ({ workout }: Props) => {
     new Set(
       workout.sets.map((set) => {
         return set.exercise.title;
-      })
-    )
+      }),
+    ),
   );
 
   return (
     <Link
       href={`/workouts/${workout.id}`}
-      className="border p-4 w-full rounded-lg"
+      className="w-full rounded-lg border p-4"
     >
       <div className="flex items-center gap-1">
         <div className="">{dayjs(workout.date).format("MMM DD")}</div>・
         <div>{workout.location?.name}</div>
       </div>
-      <div className="flex gap-1 flex-wrap mt-2">
+      <div className="mt-2 flex flex-wrap gap-1">
         {exerciseNames.length === 0 && (
           <div className="text-neutral-400">No exercises</div>
         )}

@@ -19,7 +19,7 @@ const SetView = ({ set }: Props) => {
           size: 60,
         })}
       </div>
-      <div className="flex items-center gap-3 mt-6">
+      <div className="mt-6 flex items-center gap-3">
         {set.exercise.type === "STRENGTH" ? (
           <>
             <div className="flex items-baseline gap-1.5">
@@ -54,7 +54,7 @@ const SetView = ({ set }: Props) => {
           </>
         )}
       </div>
-      <div className="text-muted-foreground text-sm mt-6">
+      <div className="mt-6 text-sm text-muted-foreground">
         {dayjs(set.createdAt).format("ddd MMM DD, YYYY - HH:mm")}
       </div>
     </div>

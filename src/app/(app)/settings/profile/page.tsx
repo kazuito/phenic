@@ -21,7 +21,7 @@ const Page = async () => {
             <AvatarImage src={session.user.image ?? ""} alt="" />
             <AvatarFallback>{session.user.name}</AvatarFallback>
           </Avatar>
-          <div className="font-semibold mt-2">{session.user.name}</div>
+          <div className="mt-2 font-semibold">{session.user.name}</div>
           <div className="text-sm">{session.user.email}</div>
         </div>
         <form

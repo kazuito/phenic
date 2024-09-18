@@ -41,7 +41,7 @@ const TempMessage = <T,>({
     <div
       className={cn(
         show ? "animate-fade-in-down" : "animate-fade-out-down",
-        className
+        className,
       )}
       {...props}
     >

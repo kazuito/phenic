@@ -12,7 +12,7 @@ const Loading = ({}: Props) => {
       />
       <div className="p-4">
         <Skeleton className="h-14 w-full rounded-xl" />
-        <div className="flex flex-col gap-2 w-full mt-4">
+        <div className="mt-4 flex w-full flex-col gap-2">
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton className="h-40 w-full rounded-xl" key={i} />
           ))}

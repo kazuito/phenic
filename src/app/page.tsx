@@ -4,7 +4,7 @@ type Props = {};
 
 const Page = ({}: Props) => {
   return (
-    <div className="min-h-screen grid place-content-center">
+    <div className="grid min-h-screen place-content-center">
       <Link href="/workouts">Phenic</Link>
     </div>
   );

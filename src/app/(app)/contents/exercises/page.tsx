@@ -57,7 +57,7 @@ const Page = () => {
           </DialogContent>
         </Dialog>
         {isLoading ? (
-          <Skeleton className="h-96 w-full mt-4 rounded-xl" />
+          <Skeleton className="mt-4 h-96 w-full rounded-xl" />
         ) : (
           <ListMenu>
             <ListMenuGroup className="mt-4">

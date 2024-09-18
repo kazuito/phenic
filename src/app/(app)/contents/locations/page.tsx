@@ -56,9 +56,9 @@ const Page = () => {
           </DialogContent>
         </Dialog>
         {isLoading ? (
-          <Skeleton className="h-96 w-full mt-4 rounded-xl" />
+          <Skeleton className="mt-4 h-96 w-full rounded-xl" />
         ) : (
-          <ListMenu className="flex flex-col mt-4 gap-2">
+          <ListMenu className="mt-4 flex flex-col gap-2">
             <ListMenuGroup>
               {locations.map((location, i) => {
                 return (

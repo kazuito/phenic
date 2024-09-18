@@ -61,7 +61,7 @@ const Location = ({ setLocations, location }: Props) => {
       prev.map((e) => ({
         ...e,
         isDefault: e.id === data.id,
-      }))
+      })),
     );
   };
 

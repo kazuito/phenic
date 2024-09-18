@@ -6,7 +6,7 @@ type Props = {};
 
 const Page = ({}: Props) => {
   return (
-    <div className="min-h-screen grid place-content-center">
+    <div className="grid min-h-screen place-content-center">
       <form
         action={async () => {
           "use server";

@@ -11,7 +11,7 @@ type Props = {
 
 const SetHeader = (props: Props) => {
   return (
-    <div className="flex items-center gap-3 justify-between">
+    <div className="flex items-center justify-between gap-3">
       <div className="font-BebasNeue leading-none text-neutral-700">
         {props.exerciseName}
       </div>

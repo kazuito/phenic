@@ -108,7 +108,7 @@ const app = new Hono()
       z.object({
         id: z.string(),
       }),
-      zHandler
+      zHandler,
     ),
     async (c) => {
       const session = await auth();
@@ -126,6 +126,6 @@ const app = new Hono()
       });
 
       return c.json(exercise);
-    }
+    },
   );
 export default app;

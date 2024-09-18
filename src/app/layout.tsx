@@ -38,7 +38,7 @@ export default function RootLayout({
           geistSans.variable,
           geistMono.variable,
           BebasNeueFont.variable,
-          "antialiased"
+          "antialiased",
         )}
       >
         <Providers>{children}</Providers>

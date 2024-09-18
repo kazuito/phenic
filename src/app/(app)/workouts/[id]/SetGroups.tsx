@@ -60,17 +60,17 @@ const Sets = ({ workout }: Props) => {
   const workGroups = catSeries(sets, (set) => set.exercise.title);
 
   return (
-    <div className="px-4 flex flex-col gap-4 sm:px-10">
+    <div className="flex flex-col gap-4 px-4 sm:px-10">
       {workGroups.map((workGroup, i) => {
         return (
           <div key={i} className="flex gap-2">
-            <div className="flex flex-col gap-3 shrink-0 items-center">
+            <div className="flex shrink-0 flex-col items-center gap-3">
               <div className="text-neutral-700">
                 {getExerciseIcon(workGroup[0].exercise.iconName, {
                   size: 22,
                 })}
               </div>
-              <div className="w-2 grow bg-gradient-to-b shrink-0 from-blue-600 via-cyan-200 to-transparent rounded-full"></div>
+              <div className="w-2 shrink-0 grow rounded-full bg-gradient-to-b from-blue-600 via-cyan-200 to-transparent"></div>
             </div>
             <div className="grow">
               <WorkHeader exerciseName={workGroup[0].exercise.title} />
@@ -91,7 +91,7 @@ const Sets = ({ workout }: Props) => {
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button
-                        className="w-full mt-2"
+                        className="mt-2 w-full"
                         variant="outline"
                         size="sm"
                       >
@@ -120,7 +120,7 @@ const Sets = ({ workout }: Props) => {
       <Dialog>
         <DialogTrigger asChild>
           <Button
-            className="w-full mt-2 rounded-full sticky bottom-16 md:bottom-4 shadow-lg"
+            className="sticky bottom-16 mt-2 w-full rounded-full shadow-lg md:bottom-4"
             size="lg"
           >
             <Plus size={14} className="mr-2" />

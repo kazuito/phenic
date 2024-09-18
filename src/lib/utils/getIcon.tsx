@@ -17,7 +17,7 @@ export type ExerciseIconName = (typeof exerciseIconNames)[number];
 
 export function getExerciseIcon(
   name?: ExerciseIconName | string,
-  props?: IconProps
+  props?: IconProps,
 ) {
   switch (name as ExerciseIconName) {
     case "dumbbell":

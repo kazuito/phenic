@@ -8,14 +8,14 @@ import { cloneElement } from "react";
 
 const NavBar = () => {
   return (
-    <nav className="w-full mt-auto h-fit bg-white gap-1 justify-around sticky bottom-0 border-t md:border-none md:justify-start md:h-screen md:flex-col md:sticky md:top-0 md:items-start md:gap-0 md:p-4 md:col-start-1 md:row-start-1">
+    <nav className="sticky bottom-0 mt-auto h-fit w-full justify-around gap-1 border-t bg-white md:sticky md:top-0 md:col-start-1 md:row-start-1 md:h-screen md:flex-col md:items-start md:justify-start md:gap-0 md:border-none md:p-4">
       <Link
         href="/workouts"
-        className="font-black italic text-2xl px-4 py-2 hidden md:block"
+        className="hidden px-4 py-2 text-2xl font-black italic md:block"
       >
         Phenic
       </Link>
-      <div className="p-1 flex w-full md:flex-col md:p-0 md:mt-2">
+      <div className="flex w-full p-1 md:mt-2 md:flex-col md:p-0">
         <NavItem
           title="Workouts"
           href="/workouts"
@@ -47,14 +47,14 @@ const NavItem = ({ title, href, icon, className }: NavItemProps) => {
     <Link
       href={href}
       className={cn(
-        "rounded-full gap-3 p-3 grow flex justify-center items-center md:px-5 md:hover:bg-neutral-100 md:w-full md:justify-start md:grow-0",
+        "flex grow items-center justify-center gap-3 rounded-full p-3 md:w-full md:grow-0 md:justify-start md:px-5 md:hover:bg-neutral-100",
         path.startsWith(href) &&
           "bg-gradient-to-r from-blue-700 to-cyan-400 text-white",
-        className
+        className,
       )}
     >
       {cloneElement(icon, { className: "size-[24px] md:size-[20px]" })}
-      <div className="font-semibold sr-only md:not-sr-only md:block">
+      <div className="sr-only font-semibold md:not-sr-only md:block">
         {title}
       </div>
     </Link>
