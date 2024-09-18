@@ -8,20 +8,20 @@ import { cloneElement } from "react";
 
 const NavBar = () => {
   return (
-    <nav className="sticky bottom-0 mt-auto h-fit w-full justify-around gap-1 border-t bg-white md:sticky md:top-0 md:col-start-1 md:row-start-1 md:h-screen md:flex-col md:items-start md:justify-start md:gap-0 md:border-none md:p-4">
+    <nav className="sticky bottom-0 mt-auto h-fit w-full justify-around gap-1 border-t bg-white md:sticky md:top-0 md:col-start-1 md:row-start-1 md:h-screen md:flex-col md:items-start md:justify-start md:gap-0 md:border-none md:pl-4">
       <Link
         href="/workouts"
-        className="hidden px-4 py-2 text-2xl font-black italic md:block"
+        className="hidden px-4 py-3 text-2xl font-black italic md:block"
       >
         Phenic
       </Link>
-      <div className="flex w-full p-1 md:mt-2 md:flex-col md:p-0">
+      <div className="flex w-full p-1 md:flex-col md:p-0">
+        <NavItem title="Workouts" href="/workouts" icon={<DumbbellIcon />} />
         <NavItem
-          title="Workouts"
-          href="/workouts"
+          title="Contents"
+          href="/contents"
           icon={<NotebookTabsIcon />}
         />
-        <NavItem title="Contents" href="/contents" icon={<DumbbellIcon />} />
         <NavItem
           title="Settings"
           href="/settings"
