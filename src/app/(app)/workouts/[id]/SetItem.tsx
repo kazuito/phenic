@@ -42,8 +42,8 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
   return (
     <Dialog onOpenChange={(open) => setIsEditing(open && isEditing)}>
       <DialogTrigger asChild>
-        <div className="-ml-1.5 flex cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-0.5 has-[+button]:animate-new-item">
-          <div className="mr-1 grid size-5 place-content-center rounded-md bg-black text-sm font-bold tracking-tighter text-white">
+        <div className="-ml-1.5 flex w-full cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-0.5 has-[+button]:animate-fade-in-up">
+          <div className="mr-1 grid size-5 shrink-0 place-content-center rounded-md bg-black text-sm font-bold tracking-tighter text-white">
             {indexOfSet + 1}
           </div>
           <div className="flex items-center gap-1">
@@ -64,11 +64,9 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
               </>
             )}
           </div>
-          <div className="ml-2 truncate text-sm text-neutral-400">
-            {set.memo}
-          </div>
-          <div className="ml-auto text-xs text-neutral-400">
-            {dayjs(set.createdAt).format("HH:mm")}
+          <div className="flex min-w-0 grow items-center justify-end gap-2  text-xs text-neutral-400">
+            <div className="truncate max-w-sm">{set.memo}</div>
+            <div className="">{dayjs(set.createdAt).format("HH:mm")}</div>
           </div>
         </div>
       </DialogTrigger>

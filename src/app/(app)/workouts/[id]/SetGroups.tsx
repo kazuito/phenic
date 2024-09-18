@@ -72,9 +72,9 @@ const Sets = ({ workout }: Props) => {
               </div>
               <div className="w-2 shrink-0 grow rounded-full bg-gradient-to-b from-blue-600 via-cyan-200 to-transparent"></div>
             </div>
-            <div className="grow">
+            <div className="min-w-0 grow">
               <WorkHeader exerciseName={workGroup[0].exercise.title} />
-              <div className="mt-1 flex flex-col">
+              <div className="mt-1 flex w-full flex-col">
                 {workGroup.map((set, j) => {
                   return (
                     <SetItem

@@ -54,15 +54,17 @@ const SetView = ({ set }: Props) => {
           </>
         )}
       </div>
-      <div className="mt-6">
+      <div className="mt-6 flex w-full flex-col">
         {set.memo && (
-          <div className="mx-auto w-fit rounded-lg bg-muted px-3 py-1.5 text-sm">
+          <div className="mx-auto w-fit rounded-xl bg-muted px-4 py-3 text-sm leading-tight">
             {set.memo}
           </div>
         )}
-        <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-          <CalendarIcon size={16} />
-          <span>{dayjs(set.createdAt).format("ddd MMM DD, YYYY")}</span>
+        <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center justify-between gap-1.5">
+            <CalendarIcon size={14} />
+            <span>{dayjs(set.createdAt).format("ddd MMM DD, YYYY")}</span>
+          </div>
           <span>{dayjs(set.createdAt).format("HH:mm")}</span>
         </div>
       </div>
