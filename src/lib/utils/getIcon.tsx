@@ -1,4 +1,4 @@
-import { IconBarbell, IconDumbbell, IconProps } from "@/components/Icon";
+import { IconBarbell, IconDumbbell, IconProps } from "../../components/Icon";
 
 export const exerciseIconNames = ["dumbbell", "barbell"] as const;
 
