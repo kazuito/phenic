@@ -42,7 +42,7 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
   return (
     <Dialog onOpenChange={(open) => setIsEditing(open && isEditing)}>
       <DialogTrigger asChild>
-        <div className="-ml-1.5 cursor-pointer flex items-center gap-1.5 py-0.5 rounded-md px-1.5">
+        <div className="-ml-1.5 cursor-pointer flex items-center gap-1.5 py-0.5 rounded-md px-1.5 has-[+button]:animate-new-item">
           <div className="tracking-tighter mr-1 size-5 text-sm text-white bg-black font-bold grid place-content-center rounded-md">
             {indexOfSet + 1}
           </div>

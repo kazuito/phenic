@@ -79,6 +79,7 @@ const config: Config = {
         "fade-out": "fade-out 0.3s ease forwards",
         "fade-out-down": "fade-out-down 0.3s ease forwards",
         "grow-in-h": "grow-in-h 0.3s ease forwards",
+        "new-item": "new-item 0.5s ease",
       },
       keyframes: {
         run: {
@@ -108,6 +109,15 @@ const config: Config = {
         "grow-in-h": {
           from: { transform: "scaleX(0)" },
           to: { transform: "scaleX(1)" },
+        },
+        "new-item": {
+          "0%": {
+            transform: "translateX(100%)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateX(0) scale(1)",
+          },
         },
       },
     },
