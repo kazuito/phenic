@@ -19,5 +19,3 @@ export type AppType = typeof routes;
 
 export const GET = handle(app);
 export const POST = handle(app);
-
-

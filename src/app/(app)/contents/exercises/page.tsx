@@ -39,7 +39,7 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="pb-20">
       <PageHeader heading="Exercises" backHref="/contents" />
       <div className="px-4">
         <Dialog>

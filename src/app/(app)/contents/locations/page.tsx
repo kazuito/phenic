@@ -38,7 +38,7 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="pb-20">
       <PageHeader heading="Locations" backHref="/contents" />
       <div className="px-4">
         <Dialog>
