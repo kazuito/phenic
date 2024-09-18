@@ -116,6 +116,7 @@ const WorkForm = ({
         const newExercise = await res.json();
         setExercises((prev) => [...prev, newExercise]);
         formApi.setFieldValue("exerciseId", newExercise.id);
+        setSelectedExerciseType(newExercise.type);
         exerciseId = newExercise.id;
       }
 
@@ -362,7 +363,7 @@ const WorkForm = ({
         children={({ state, handleChange, handleBlur }) => (
           <Select
             defaultOpen={initialOpen}
-            defaultValue={state.value === "" ? undefined : state.value}
+            defaultValue={state.value}
             onValueChange={(value) => {
               handleChange(value);
               setSelectedExerciseType(
@@ -384,16 +385,18 @@ const WorkForm = ({
               )}
             </SelectTrigger>
             <SelectContent onBlur={handleBlur}>
-              {exercises.map((exercise, i) => {
-                return (
-                  <SelectItem key={i} value={exercise.id}>
-                    <div className="flex items-center gap-2">
-                      {getExerciseIcon(exercise.iconName, { size: 18 })}
-                      <span className="font-semibold">{exercise.title}</span>
-                    </div>
-                  </SelectItem>
-                );
-              })}
+              {exercises
+                .sort((a, b) => a.title.localeCompare(b.title))
+                .map((exercise, i) => {
+                  return (
+                    <SelectItem key={i} value={exercise.id}>
+                      <div className="flex items-center gap-2">
+                        {getExerciseIcon(exercise.iconName, { size: 18 })}
+                        <span className="font-semibold">{exercise.title}</span>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
               <SelectSeparator />
               <SelectItem value="new">
                 <div className="flex items-center gap-2">
