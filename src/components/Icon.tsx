@@ -46,3 +46,13 @@ export const IconRun = icon(
     <path d="M5.50676 12.0707L10.8665 12.3594L4.227 7.73842L1 18.3322L5.50676 12.0707Z" />
   </svg>
 );
+
+export const IconMachinePlates = icon(
+  <svg viewBox="0 0 24 24">
+    <path d="M11 2C11 1.44772 11.4477 1 12 1V1C12.5523 1 13 1.44772 13 2V6.72727C13 6.8779 12.8779 7 12.7273 7H11.2727C11.1221 7 11 6.8779 11 6.72727V2Z" />
+    <rect x="4" y="8" width="16" height="3" rx="1" />
+    <rect x="11" y="12" width="2" height="2" rx="0.5" />
+    <rect x="4" y="15" width="16" height="3" rx="1" />
+    <rect x="4" y="19" width="16" height="3" rx="1" />
+  </svg>
+);

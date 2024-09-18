@@ -48,8 +48,8 @@ const Exercise = ({ setExercises, exercise }: Props) => {
   return (
     <>
       <ListMenuItem
-        heading={exercise.title}
-        icon={getExerciseIcon(exercise.iconName)}
+        heading={<div className="font-BebasNeue text-lg">{exercise.title}</div>}
+        icon={getExerciseIcon(exercise.iconName, { size: 24 })}
         endContent={
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
