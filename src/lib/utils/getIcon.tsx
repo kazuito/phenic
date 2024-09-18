@@ -1,6 +1,11 @@
-import { IconBarbell, IconDumbbell, IconProps } from "../../components/Icon";
+import {
+  IconBarbell,
+  IconDumbbell,
+  IconProps,
+  IconRun,
+} from "../../components/Icon";
 
-export const exerciseIconNames = ["dumbbell", "barbell"] as const;
+export const exerciseIconNames = ["dumbbell", "barbell", "run"] as const;
 
 export type ExerciseIconName = (typeof exerciseIconNames)[number];
 
@@ -13,6 +18,8 @@ export function getExerciseIcon(
       return <IconDumbbell {...props} />;
     case "barbell":
       return <IconBarbell {...props} />;
+    case "run":
+      return <IconRun {...props} />;
     default:
       return <IconDumbbell {...props} />;
   }
