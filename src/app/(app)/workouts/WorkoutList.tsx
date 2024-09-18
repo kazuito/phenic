@@ -63,7 +63,7 @@ const WorkoutList = () => {
           <DialogTrigger asChild>
             <Button
               className={cn(
-                "w-full rounded-full shadow-lg opacity-0",
+                "w-full rounded-full opacity-0 shadow-lg",
                 !isLoading && "animate-fade-in-up",
               )}
               size="lg"
