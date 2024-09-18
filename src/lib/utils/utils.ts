@@ -1,4 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
+import { ClientResponse } from "hono/client";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -36,4 +38,22 @@ export function catSeries<T>(
   }
 
   return groups;
+}
+
+export async function getErrorMessage(
+  res: ClientResponse<Object, number, "json">,
+): Promise<string> {
+  const data = await res.json();
+
+  if ("error" in data && typeof data.error === "string") {
+    return data.error;
+  }
+
+  return "Something went wrong";
+}
+
+export async function showErrorToast(
+  res: ClientResponse<Object, number, "json">,
+) {
+  toast.error(await getErrorMessage(res));
 }

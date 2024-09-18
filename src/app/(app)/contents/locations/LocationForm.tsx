@@ -3,10 +3,10 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import client from "@/lib/hono";
+import { getErrorMessage, showErrorToast } from "@/lib/utils/utils";
 import { useForm } from "@tanstack/react-form";
 import { InferResponseType } from "hono";
 import { Dispatch, SetStateAction, useState } from "react";
-import { toast } from "sonner";
 
 type Props = {
   defaultValue?: InferResponseType<typeof client.api.location.$get, 200>[0];
@@ -21,6 +21,7 @@ const LocationForm = ({
   setLocations,
   isEdit = false,
 }: Props) => {
+  const [error, setError] = useState<string>();
   const { Field, handleSubmit, useStore } = useForm({
     defaultValues: defaultValue
       ? {
@@ -30,28 +31,42 @@ const LocationForm = ({
           name: "",
         },
     onSubmit: async ({ value }) => {
-      const res = await client.api.location.$post({
-        json: {
-          id: isEdit ? defaultValue?.id : undefined,
-          name: value.name,
-        },
-      });
-
-      if (!res.ok) {
-        const e = await res.json();
-        toast.error("error" in e ? e.error : "Something went wrong");
-        return;
-      }
-
-      setMessage(isEdit ? "Updated" : "Added");
-
-      const data = await res.json();
-
       if (isEdit) {
+        const res = await client.api.location[":id"].$put({
+          param: {
+            id: defaultValue?.id ?? "",
+          },
+          json: {
+            name: value.name,
+          },
+        });
+
+        if (!res.ok) {
+          setError(await getErrorMessage(res));
+          return;
+        }
+
+        const data = await res.json();
         setLocations((prev) => prev.map((e) => (e.id === data.id ? data : e)));
+        setMessage("Updated");
       } else {
+        const res = await client.api.location.$post({
+          json: {
+            name: value.name,
+          },
+        });
+
+        if (!res.ok) {
+          setError(await getErrorMessage(res));
+          return;
+        }
+
+        const data = await res.json();
         setLocations((prev) => [data, ...prev]);
+        setMessage("Added");
       }
+
+      setError("");
     },
   });
 
@@ -77,6 +92,7 @@ const LocationForm = ({
               onChange={(e) => handleChange(e.target.value)}
               onBlur={handleBlur}
               placeholder="Location name"
+              error={error || state.meta.errors.join(", ")}
             />
           )}
         />

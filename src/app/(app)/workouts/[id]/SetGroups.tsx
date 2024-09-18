@@ -57,25 +57,25 @@ const Sets = ({ workout }: Props) => {
     fetchExercises();
   }, []);
 
-  const workGroups = catSeries(sets, (set) => set.exercise.title);
+  const setGroups = catSeries(sets, (set) => set.exercise.title);
 
   return (
     <div className="flex flex-col gap-4 px-4 sm:px-10">
-      {workGroups.map((workGroup, i) => {
+      {setGroups.map((setGroup, i) => {
         return (
           <div key={i} className="flex gap-2">
             <div className="flex shrink-0 flex-col items-center gap-3">
               <div className="text-neutral-700">
-                {getExerciseIcon(workGroup[0].exercise.iconName, {
+                {getExerciseIcon(setGroup[0].exercise.iconName, {
                   size: 22,
                 })}
               </div>
               <div className="w-2 shrink-0 grow rounded-full bg-gradient-to-b from-blue-600 via-cyan-200 to-transparent"></div>
             </div>
             <div className="min-w-0 grow">
-              <WorkHeader exerciseName={workGroup[0].exercise.title} />
+              <WorkHeader exerciseName={setGroup[0].exercise.title} />
               <div className="mt-1 flex w-full flex-col">
-                {workGroup.map((set, j) => {
+                {setGroup.map((set, j) => {
                   return (
                     <SetItem
                       key={j}
@@ -87,7 +87,7 @@ const Sets = ({ workout }: Props) => {
                     />
                   );
                 })}
-                {i === workGroups.length - 1 && (
+                {i === setGroups.length - 1 && (
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button
@@ -96,7 +96,7 @@ const Sets = ({ workout }: Props) => {
                         size="sm"
                       >
                         <Plus size={14} className="mr-2" />
-                        Add {workGroup[0].exercise.title}
+                        Add {setGroup[0].exercise.title}
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
@@ -106,7 +106,7 @@ const Sets = ({ workout }: Props) => {
                       <WorkForm
                         setSets={setSets}
                         workoutId={workout.id}
-                        defaultValues={workGroup[workGroup.length - 1]}
+                        defaultSet={setGroup[setGroup.length - 1]}
                         exercises={exercises}
                       />
                     </DialogContent>

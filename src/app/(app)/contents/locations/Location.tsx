@@ -20,6 +20,7 @@ import { CircleDashed, Ellipsis, PencilIcon, TrashIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import LocationForm from "./LocationForm";
+import { showErrorToast } from "@/lib/utils/utils";
 
 type Props = {
   location: InferResponseType<typeof client.api.location.$get, 200>[0];
@@ -32,28 +33,28 @@ const Location = ({ setLocations, location }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const deleteLocation = async () => {
-    const res = await client.api.location.delete[":id"].$get({
+    const res = await client.api.location[":id"].$delete({
       param: {
         id: location.id,
       },
     });
     if (!res.ok) {
-      toast.error("Failed to delete location");
+      showErrorToast(res);
       return;
     }
-    toast.success(`Deleted '${location.name}' successfully`);
+    toast.success(`${location.name} deleted successfully`);
     const data = await res.json();
     setLocations((prev) => prev.filter((e) => e.id !== data.id));
   };
 
   const setDefaultLocation = async () => {
-    const res = await client.api.location.default[":id"].$get({
+    const res = await client.api.location.default[":id"].$put({
       param: {
         id: location.id,
       },
     });
     if (!res.ok) {
-      toast.error("Failed to set as default location");
+      showErrorToast(res);
       return;
     }
     const data = await res.json();

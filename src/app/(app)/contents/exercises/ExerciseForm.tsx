@@ -11,6 +11,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import client from "@/lib/hono";
 import { ExerciseIconName, getExerciseIcon } from "@/lib/utils/getIcon";
+import { showErrorToast } from "@/lib/utils/utils";
 import { ExerciseType } from "@prisma/client";
 import { useForm } from "@tanstack/react-form";
 import { InferResponseType } from "hono";
@@ -43,28 +44,44 @@ const ExerciseForm = ({
           iconName: "dumbbell",
         },
     onSubmit: async ({ value }) => {
-      const res = await client.api.exercise.$post({
-        json: {
-          id: isEdit ? defaultValue?.id : undefined,
-          name: value.name,
-          iconName: value.iconName,
-          type: value.type as ExerciseType,
-        },
-      });
-
-      if (!res.ok) {
-        const e = await res.json();
-        toast.error("error" in e ? e.error : "Something went wrong");
-        return;
-      }
-
-      const data = await res.json();
-      setMessage(isEdit ? "Updated" : "Added");
-
+      // Update existing exercise
       if (isEdit) {
+        const res = await client.api.exercise[":id"].$put({
+          param: {
+            id: defaultValue?.id ?? "",
+          },
+          json: {
+            name: value.name,
+            iconName: value.iconName,
+          },
+        });
+
+        if (!res.ok) {
+          showErrorToast(res);
+          return;
+        }
+
+        const data = await res.json();
         setExercises((prev) => prev.map((e) => (e.id === data.id ? data : e)));
-      } else {
+      }
+      // Add new exercise
+      else {
+        const res = await client.api.exercise.$post({
+          json: {
+            name: value.name,
+            iconName: value.iconName,
+            type: value.type as ExerciseType,
+          },
+        });
+
+        if (!res.ok) {
+          showErrorToast(res);
+          return;
+        }
+
+        const data = await res.json();
         setExercises((prev) => [data, ...prev]);
+        setMessage(isEdit ? "Updated" : "Added");
       }
     },
   });

@@ -7,15 +7,21 @@ import { z } from "zod";
 
 export const schemas = {
   $post: z.object({
-    id: z.string().optional(),
     name: z
       .string()
       .min(1, "Name must be at least 1 character")
-      .max(255, "Name must be at most 255 characters"),
+      .max(100, "Name must be at most 100 characters"),
+  }),
+  $put: z.object({
+    name: z
+      .string()
+      .min(1, "Name must be at least 1 character")
+      .max(100, "Name must be at most 100 characters"),
   }),
 };
 
 const app = new Hono()
+  // Get locations
   .get("/", async (c) => {
     const userId = getUserId();
     const locations = await prisma.location.findMany({
@@ -26,6 +32,7 @@ const app = new Hono()
 
     return c.json(locations ?? []);
   })
+  // Create new location
   .post("/", zValidator("json", schemas.$post, zHandler), async (c) => {
     const body = c.req.valid("json");
     const userId = getUserId();
@@ -34,8 +41,43 @@ const app = new Hono()
       where: {
         name: body.name,
         userId: userId,
+      },
+    });
+    if (existingLocation) {
+      return c.json({ error: `${body.name} is already exists` }, 400);
+    }
+
+    const location = await prisma.location.create({
+      data: {
+        name: body.name,
+        userId: userId,
+      },
+    });
+
+    return c.json(location);
+  })
+  // Update location
+  .put("/:id", zValidator("json", schemas.$put, zHandler), async (c) => {
+    const { id } = c.req.param();
+    const body = c.req.valid("json");
+    const userId = getUserId();
+
+    const location = await prisma.location.findUnique({
+      where: {
+        id: id,
+        userId: userId,
+      },
+    });
+    if (!location) {
+      return c.json({ error: "Location not found" }, 404);
+    }
+
+    const existingLocation = await prisma.location.findFirst({
+      where: {
+        name: body.name,
+        userId: userId,
         NOT: {
-          id: body.id,
+          id: id,
         },
       },
     });
@@ -43,22 +85,9 @@ const app = new Hono()
       return c.json({ error: `${body.name} is already exists` }, 400);
     }
 
-    // Create new location
-    if (!body.id) {
-      const location = await prisma.location.create({
-        data: {
-          name: body.name,
-          userId: userId,
-        },
-      });
-
-      return c.json(location);
-    }
-
-    // Update existing location
-    const location = await prisma.location.update({
+    const updatedLocation = await prisma.location.update({
       where: {
-        id: body.id,
+        id: id,
         userId: userId,
       },
       data: {
@@ -66,66 +95,48 @@ const app = new Hono()
       },
     });
 
-    return c.json(location);
+    return c.json(updatedLocation);
   })
-  .get(
-    "/delete/:id",
-    zValidator(
-      "param",
-      z.object({
-        id: z.string(),
-      }),
-      zHandler,
-    ),
-    async (c) => {
-      const body = c.req.valid("param");
-      const userId = getUserId();
+  // Delete location
+  .delete("/:id", async (c) => {
+    const { id } = c.req.param();
+    const userId = getUserId();
 
-      const location = await prisma.location.delete({
-        where: {
-          id: body.id,
-          userId: userId,
-        },
-      });
+    const deletedLocation = await prisma.location.delete({
+      where: {
+        id: id,
+        userId: userId,
+      },
+    });
 
-      return c.json(location);
-    },
-  )
-  .get(
-    "/default/:id",
-    zValidator(
-      "param",
-      z.object({
-        id: z.string(),
-      }),
-      zHandler,
-    ),
-    async (c) => {
-      const body = c.req.valid("param");
-      const userId = getUserId();
+    return c.json(deletedLocation);
+  })
+  // Set default location
+  .put("/default/:id", async (c) => {
+    const { id } = c.req.param();
+    const userId = getUserId();
 
-      await prisma.location.updateMany({
-        where: {
-          userId: userId,
-          isDefault: true,
-        },
-        data: {
-          isDefault: false,
-        },
-      });
+    await prisma.location.updateMany({
+      where: {
+        userId: userId,
+        isDefault: true,
+      },
+      data: {
+        isDefault: false,
+      },
+    });
 
-      const location = await prisma.location.update({
-        where: {
-          id: body.id,
-          userId: userId,
-        },
-        data: {
-          isDefault: true,
-        },
-      });
+    const newDefaultLocation = await prisma.location.update({
+      where: {
+        id: id,
+        userId: userId,
+      },
+      data: {
+        isDefault: true,
+      },
+    });
 
-      return c.json(location);
-    },
-  );
+    return c.json(newDefaultLocation);
+  });
 
 export default app;

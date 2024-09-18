@@ -19,6 +19,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import ExerciseForm from "./ExerciseForm";
 import { getExerciseIcon } from "@/lib/utils/getIcon";
+import { showErrorToast } from "@/lib/utils/utils";
 
 type Props = {
   exercise: InferResponseType<typeof client.api.exercise.$get, 200>[0];
@@ -31,13 +32,13 @@ const Exercise = ({ setExercises, exercise }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const deleteExercise = async () => {
-    const res = await client.api.exercise.delete[":id"].$get({
+    const res = await client.api.exercise[":id"].$delete({
       param: {
         id: exercise.id,
       },
     });
     if (!res.ok) {
-      toast.error("Failed to delete exercise");
+      showErrorToast(res);
       return;
     }
     const data = await res.json();

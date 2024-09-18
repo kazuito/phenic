@@ -24,6 +24,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import client from "@/lib/hono";
 import { getExerciseIcon } from "@/lib/utils/getIcon";
+import { showErrorToast } from "@/lib/utils/utils";
 import { ExerciseType, Prisma } from "@prisma/client";
 import { FieldState, Updater, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
@@ -43,7 +44,7 @@ type Props = {
     >
   >;
   workoutId: string;
-  defaultValues?: Prisma.SetGetPayload<{
+  defaultSet?: Prisma.SetGetPayload<{
     include: {
       exercise: true;
     };
@@ -65,22 +66,22 @@ const WorkForm = ({
   >(props.exercises);
   const [selectedExerciseType, setSelectedExerciseType] =
     useState<ExerciseType | null>(
-      props.defaultValues?.exercise.type ?? exercises[0]?.type ?? null,
+      props.defaultSet?.exercise.type ?? exercises[0]?.type ?? null,
     );
 
   const { Field, handleSubmit, useStore } = useForm({
     validatorAdapter: zodValidator(),
-    defaultValues: props.defaultValues
+    defaultValues: props.defaultSet
       ? {
-          exerciseId: props.defaultValues.exerciseId,
-          weight: props.defaultValues.weight ?? 0.0,
-          reps: props.defaultValues.reps ?? 0,
-          memo: isEdit ? props.defaultValues.memo : "",
-          distance: props.defaultValues.distance ?? 0.0,
-          time: props.defaultValues.time ?? 0,
+          exerciseId: props.defaultSet.exerciseId,
+          weight: props.defaultSet.weight ?? 0.0,
+          reps: props.defaultSet?.reps ?? 0,
+          memo: isEdit ? props.defaultSet.memo : "",
+          distance: props.defaultSet.distance ?? 0.0,
+          time: props.defaultSet.time ?? 0,
           newExerciseName: "",
           newExerciseType: "STRENGTH",
-          newIconName: props.defaultValues.exercise.iconName,
+          newIconName: props.defaultSet.exercise.iconName,
         }
       : {
           exerciseId: exercises[0]?.id ?? "",
@@ -94,53 +95,99 @@ const WorkForm = ({
           newIconName: "dumbbell",
         },
     onSubmit: async ({ value, formApi }) => {
-      const res = await client.api.set.$post({
-        json: {
-          exerciseId: value.exerciseId,
-          weight: value.weight,
-          reps: value.reps,
-          distance: value.distance,
-          time: value.time,
-          memo: value.memo,
-          newExerciseName: value.newExerciseName,
-          newExerciseType: value.newExerciseType as ExerciseType,
-          newIconName: value.newIconName,
-          workoutId: props.workoutId,
-          setId: isEdit ? props.defaultValues?.id : undefined,
-        },
-      });
+      let exerciseId = value.exerciseId;
+      let newSet: InferResponseType<typeof client.api.set.$post, 200>;
 
-      if (!res.ok) {
-        const e = await res.json();
-        toast.error("error" in e ? e.error : "Something went wrong");
-        return;
+      // Create new exercise
+      if (value.exerciseId === "new") {
+        const res = await client.api.exercise.$post({
+          json: {
+            name: value.newExerciseName,
+            iconName: value.newIconName,
+            type: value.newExerciseType as ExerciseType,
+          },
+        });
+
+        if (!res.ok) {
+          showErrorToast(res);
+          return;
+        }
+
+        const newExercise = await res.json();
+        setExercises((prev) => [...prev, newExercise]);
+        formApi.setFieldValue("exerciseId", newExercise.id);
+        exerciseId = newExercise.id;
       }
 
-      setMessage(isEdit ? "Updated" : "Added");
+      // Update set
+      if (isEdit) {
+        const res = await client.api.set[":id"].$put({
+          param: {
+            id: props.defaultSet?.id ?? "",
+          },
+          json: {
+            exerciseId: exerciseId,
+            weight: value.weight,
+            reps: value.reps,
+            distance: value.distance,
+            time: value.time,
+            memo: value.memo,
+            workoutId: props.workoutId,
+          },
+        });
 
-      const newSet: Prisma.SetGetPayload<{
+        if (!res.ok) {
+          showErrorToast(res);
+          return;
+        }
+
+        newSet = await res.json();
+        setMessage("Updated");
+      }
+      // Create new set
+      else {
+        const res = await client.api.set.$post({
+          json: {
+            exerciseId: exerciseId,
+            weight: value.weight,
+            reps: value.reps,
+            distance: value.distance,
+            time: value.time,
+            memo: value.memo,
+            workoutId: props.workoutId,
+          },
+        });
+
+        if (!res.ok) {
+          showErrorToast(res);
+          return;
+        }
+
+        newSet = await res.json();
+        setMessage("Added");
+      }
+
+      const typedNewSet: Prisma.SetGetPayload<{
         include: {
           exercise: true;
         };
-      }> = await res.json().then((w) => {
-        return {
-          ...w,
-          createdAt: new Date(w.createdAt),
-          updatedAt: new Date(w.updatedAt),
-          exercise: {
-            ...w.exercise,
-            createdAt: new Date(w.exercise.createdAt),
-            updatedAt: new Date(w.exercise.updatedAt),
-          },
-        };
-      });
+      }> = {
+        ...newSet,
+        createdAt: new Date(newSet.createdAt),
+        updatedAt: new Date(newSet.updatedAt),
+        exercise: {
+          ...newSet.exercise,
+          createdAt: new Date(newSet.exercise.createdAt),
+          updatedAt: new Date(newSet.exercise.updatedAt),
+        },
+      };
 
       if (isEdit) {
         props.setSets((prev) =>
-          prev.map((s) => (s.id === newSet.id ? newSet : s)),
+          prev.map((s) => (s.id === newSet.id ? typedNewSet : s)),
         );
       } else {
-        props.setSets((prev) => [...prev, newSet]);
+        props.setSets((prev) => [...prev, typedNewSet]);
       }
 
       formApi.setFieldValue("memo", "");
@@ -152,26 +199,10 @@ const WorkForm = ({
   const values = useStore((state) => state.values);
   const isSubmitting = useStore((state) => state.isSubmitting);
 
-  const fetchExercises = async () => {
-    const res = await client.api.exercise.$get();
-
-    if (!res.ok) {
-      return;
-    }
-
-    const exercises = await res.json();
-
-    setExercises(exercises);
-  };
-
-  useEffect(() => {
-    fetchExercises();
-  }, []);
-
   const deleteSet = async () => {
     const res = await client.api.set[":id"].$delete({
       param: {
-        id: props.defaultValues?.id ?? "",
+        id: props.defaultSet?.id ?? "",
       },
     });
     if (!res.ok) {
@@ -179,9 +210,7 @@ const WorkForm = ({
     }
     const deletedSet = await res.json();
     onDelete?.(deletedSet.id);
-    toast.success(
-      `${props.defaultValues?.exercise.title ?? "Exercise"} Deleted`,
-    );
+    toast.success(`${props.defaultSet?.exercise.title ?? "Exercise"} Deleted`);
   };
 
   type CustomNumberInputProps = {

@@ -87,7 +87,7 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
           <SetForm
             setSets={setSets}
             workoutId={workoutId}
-            defaultValues={set}
+            defaultSet={set}
             exercises={exercises}
             isEdit
             onDelete={(deletedSetId) => {
