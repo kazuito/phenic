@@ -57,7 +57,7 @@ const WorkoutList = () => {
           })}
         </div>
       ) : null}
-      <div className="fixed bottom-[72px] w-full px-4">
+      <div className="sticky mt-4 bottom-16 w-full md:bottom-4">
         <Dialog>
           <DialogTrigger asChild>
             <Button

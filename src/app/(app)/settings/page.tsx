@@ -10,9 +10,9 @@ type Props = {};
 
 const Page = ({}: Props) => {
   return (
-    <div>
+    <div className="">
       <PageHeader heading="Settings" hideBack />
-      <ListMenu className="px-4">
+      <ListMenu className="px-4 pb-4">
         <ListMenuGroup>
           <ListMenuItem
             heading="Profile"

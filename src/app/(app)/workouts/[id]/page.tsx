@@ -36,9 +36,9 @@ const Page = async (props: Props) => {
   const dateText = dayjs(workout.date).format("ddd MMM DD");
 
   return (
-    <div className="">
+    <div className="pb-4">
       <CustomPageHeader heading={dateText} workoutId={workout.id} />
-      <div className="pb-20">
+      <div>
         <InfoCard location={workout.location.name} />
         <Works workout={workout} />
       </div>

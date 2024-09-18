@@ -39,9 +39,9 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="pb-20">
+    <div>
       <PageHeader heading="Exercises" backHref="/contents" />
-      <div className="px-4">
+      <div className="px-4 pb-4">
         <Dialog>
           <DialogTrigger asChild>
             <Button className="w-full" variant="outline">

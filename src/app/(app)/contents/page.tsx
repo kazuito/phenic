@@ -6,7 +6,7 @@ const Page = () => {
   return (
     <>
       <PageHeader heading="Contents" hideBack />
-      <div className="px-4">
+      <div className="px-4 pb-4">
         <ListMenuGroup>
           <ListMenuItem
             heading="Exercises"

@@ -120,7 +120,7 @@ const Sets = ({ workout }: Props) => {
       <Dialog>
         <DialogTrigger asChild>
           <Button
-            className="w-full mt-2 rounded-full sticky bottom-[72px] shadow-lg"
+            className="w-full mt-2 rounded-full sticky bottom-16 md:bottom-4 shadow-lg"
             size="lg"
           >
             <Plus size={14} className="mr-2" />

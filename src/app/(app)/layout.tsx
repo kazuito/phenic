@@ -6,10 +6,10 @@ type Props = {
 
 const Layout = ({ children }: Props) => {
   return (
-    <>
-      {children}
+    <div className="md:grid md:grid-cols-[224px,1fr] min-h-[100dvh] flex flex-col">
+      <div className="md:col-start-2">{children}</div>
       <NavBar />
-    </>
+    </div>
   );
 };
 

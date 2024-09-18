@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <>
       <PageHeader heading="Workouts" hideBack />
-      <main>
+      <main className="pb-4">
         <Workouts />
       </main>
     </>
