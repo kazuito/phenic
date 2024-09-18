@@ -33,7 +33,7 @@ const Page = async (props: Props) => {
     return notFound();
   }
 
-  const dateText = dayjs(workout.date).format("MMM DD");
+  const dateText = dayjs(workout.date).format("ddd MMM DD");
 
   return (
     <div className="">

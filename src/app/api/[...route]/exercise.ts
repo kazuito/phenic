@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { prisma } from "../../../lib/prisma";
 import { zValidator } from "@hono/zod-validator";
-import { ExerciseType } from "@prisma/client";
+import { ExerciseType, Prisma } from "@prisma/client";
 import { zHandler } from "./zod";
 
 export const schemas = {
@@ -16,6 +16,18 @@ export const schemas = {
     iconName: z.string(),
     type: z.nativeEnum(ExerciseType),
   }),
+};
+
+const basicExerciseSelect: Partial<Prisma.ExerciseSelect> = {
+  id: true,
+  title: true,
+  type: true,
+  iconName: true,
+  createdAt: true,
+};
+
+const minimalExerciseSelect: Partial<Prisma.ExerciseSelect> = {
+  id: true,
 };
 
 const app = new Hono()
@@ -32,12 +44,7 @@ const app = new Hono()
       orderBy: {
         title: "asc",
       },
-      select: {
-        title: true,
-        type: true,
-        id: true,
-        iconName: true,
-      },
+      select: basicExerciseSelect,
     });
 
     return c.json(exercises);
@@ -57,6 +64,7 @@ const app = new Hono()
           id: body.id,
         },
       },
+      select: minimalExerciseSelect,
     });
     if (existingExercise) {
       return c.json({ error: `${body.name} is already exists` }, 400);
@@ -71,6 +79,7 @@ const app = new Hono()
           iconName: body.iconName,
           userId: session.user.id,
         },
+        select: basicExerciseSelect,
       });
 
       return c.json(exercise);
@@ -87,6 +96,7 @@ const app = new Hono()
         title: body.name,
         iconName: body.iconName,
       },
+      select: basicExerciseSelect,
     });
 
     return c.json(exercise);
@@ -112,6 +122,7 @@ const app = new Hono()
           id: body.id,
           userId: session.user.id,
         },
+        select: minimalExerciseSelect,
       });
 
       return c.json(exercise);

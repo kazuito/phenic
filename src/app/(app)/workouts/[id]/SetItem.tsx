@@ -14,6 +14,7 @@ import SetForm from "./SetForm";
 import SetView from "./SetView";
 import { InferResponseType } from "hono";
 import client from "@/lib/hono";
+import dayjs from "dayjs";
 
 type Props = {
   indexOfSet: number;
@@ -39,7 +40,7 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={(open) => setIsEditing(open && isEditing)}>
       <DialogTrigger asChild>
         <div className="-ml-1.5 cursor-pointer flex items-center gap-1 py-0.5 rounded-md px-1.5">
           <div className="tracking-tighter mr-1 size-5 text-sm font-bold bg-black text-white grid place-content-center rounded-md">
@@ -63,6 +64,9 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
           )}
           <div className="truncate text-sm ml-2 text-neutral-400">
             {set.memo}
+          </div>
+          <div className="text-xs text-neutral-400 ml-auto">
+            {dayjs(set.createdAt).format("HH:mm")}
           </div>
         </div>
       </DialogTrigger>

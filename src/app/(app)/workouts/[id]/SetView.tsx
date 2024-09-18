@@ -1,5 +1,6 @@
 import { getExerciseIcon } from "@/lib/utils/getIcon";
 import { Prisma } from "@prisma/client";
+import dayjs from "dayjs";
 import { SlashIcon } from "lucide-react";
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 
 const SetView = ({ set }: Props) => {
   return (
-    <div className="flex flex-col items-center pt-2 pb-6">
+    <div className="flex flex-col items-center pt-2">
       <div className="">
         {getExerciseIcon(set.exercise.iconName, {
           size: 60,
@@ -52,6 +53,9 @@ const SetView = ({ set }: Props) => {
             </div>
           </>
         )}
+      </div>
+      <div className="text-muted-foreground text-sm mt-6">
+        {dayjs(set.createdAt).format("ddd MMM DD, YYYY - HH:mm")}
       </div>
     </div>
   );
