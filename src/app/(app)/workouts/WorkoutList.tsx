@@ -15,6 +15,7 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import Workout from "./Workout";
 import WorkoutForm from "./WorkoutForm";
+import { cn } from "@/lib/utils/utils";
 
 const WorkoutList = () => {
   const [workouts, setWorkouts] = useState<
@@ -61,7 +62,10 @@ const WorkoutList = () => {
         <Dialog>
           <DialogTrigger asChild>
             <Button
-              className="w-full animate-fade-in-up rounded-full shadow-lg"
+              className={cn(
+                "w-full rounded-full shadow-lg opacity-0",
+                !isLoading && "animate-fade-in-up",
+              )}
               size="lg"
             >
               <Plus className="mr-2" size={16} />
