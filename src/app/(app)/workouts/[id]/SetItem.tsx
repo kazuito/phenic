@@ -64,8 +64,8 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
               </>
             )}
           </div>
-          <div className="flex min-w-0 grow items-center justify-end gap-2  text-xs text-neutral-400">
-            <div className="truncate max-w-sm">{set.memo}</div>
+          <div className="flex min-w-0 grow items-center justify-end gap-2 text-xs text-neutral-400">
+            <div className="max-w-sm truncate">{set.memo}</div>
             <div className="">{dayjs(set.createdAt).format("HH:mm")}</div>
           </div>
         </div>
