@@ -16,7 +16,8 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import WorkForm from "./SetForm";
 import SetItem from "./SetItem";
-import WorkHeader from "./WorkHeader";
+import WorkHeader from "./SetItemHeader";
+import { getExerciseIcon } from "@/lib/utils/getIcon";
 
 type Props = {
   workout: Prisma.WorkoutGetPayload<{
@@ -62,11 +63,18 @@ const Sets = ({ workout }: Props) => {
     <div className="px-4 flex flex-col gap-4 sm:px-10">
       {workGroups.map((workGroup, i) => {
         return (
-          <div key={i} className="flex gap-4">
-            <div className="w-2 bg-gradient-to-b shrink-0 from-blue-500 to-pink-00 rounded-full"></div>
+          <div key={i} className="flex gap-2">
+            <div className="flex flex-col gap-3 shrink-0 items-center">
+              <div className="text-neutral-700">
+                {getExerciseIcon(workGroup[0].exercise.iconName, {
+                  size: 22,
+                })}
+              </div>
+              <div className="w-2 grow bg-gradient-to-b shrink-0 from-blue-600 via-cyan-200 to-transparent rounded-full"></div>
+            </div>
             <div className="grow">
               <WorkHeader exerciseName={workGroup[0].exercise.title} />
-              <div className="mt-2 flex flex-col">
+              <div className="mt-1 flex flex-col">
                 {workGroup.map((set, j) => {
                   return (
                     <SetItem

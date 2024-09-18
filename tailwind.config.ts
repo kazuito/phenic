@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        BebasNeue: ["var(--font-BebasNeue)"],
+      },
       colors: {
         concept: {
           "50": "#fdffe7",

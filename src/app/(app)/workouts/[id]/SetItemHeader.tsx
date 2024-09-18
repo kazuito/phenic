@@ -9,10 +9,12 @@ type Props = {
   exerciseName: string;
 };
 
-const WorkHeader = (props: Props) => {
+const SetHeader = (props: Props) => {
   return (
     <div className="flex items-center gap-3 justify-between">
-      <div>{props.exerciseName}</div>
+      <div className="font-BebasNeue leading-none text-neutral-700">
+        {props.exerciseName}
+      </div>
       <Popover>
         <PopoverTrigger asChild>
           <Button size="icon" className="size-6 rounded-full" variant="outline">
@@ -25,4 +27,4 @@ const WorkHeader = (props: Props) => {
   );
 };
 
-export default WorkHeader;
+export default SetHeader;
