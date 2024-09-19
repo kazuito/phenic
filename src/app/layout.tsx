@@ -1,9 +1,9 @@
+import { cn } from "@/lib/utils/utils";
 import type { Metadata } from "next";
+import { Bebas_Neue } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Providers from "./Providers";
-import { Bebas_Neue } from "next/font/google";
-import { cn } from "@/lib/utils/utils";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

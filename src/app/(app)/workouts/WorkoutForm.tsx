@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import client from "@/lib/hono";
+import { showErrorToast } from "@/lib/utils/utils";
 import { useForm } from "@tanstack/react-form";
 import dayjs from "dayjs";
 import { InferResponseType } from "hono";
@@ -66,8 +67,7 @@ const WorkoutForm = () => {
       const res = await client.api.location.$get();
 
       if (!res.ok) {
-        const e = await res.json();
-        toast.error("error" in e ? e.error : "Something went wrong");
+        showErrorToast(res);
         return;
       }
       const data = await res.json();

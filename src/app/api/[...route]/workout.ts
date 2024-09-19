@@ -3,26 +3,26 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { getUserId } from "@/lib/server/hono";
+import { zHandler } from "@/lib/server/zod";
 
 export const schemas = {
+  $get: z.object({
+    limit: z.string().optional(),
+    offset: z.string().optional(),
+  }),
   $post: z.object({
     date: z.string(),
     locationId: z.string(),
     newLocationName: z.string(),
   }),
-  delete: {
-    [":id"]: {
-      $get: z.object({
-        id: z.string(),
-      }),
-    },
-  },
 };
 
 const app = new Hono()
   // get all workout
-  .get("/", async (c) => {
+  .get("/", zValidator("query", schemas.$get, zHandler), async (c) => {
+    const { limit, offset } = c.req.valid("query");
     const userId = getUserId();
+
     const workouts = await prisma.workout.findMany({
       where: {
         userId: userId,
@@ -41,17 +41,21 @@ const app = new Hono()
       orderBy: {
         date: "desc",
       },
+      take: parseInt(limit || "10"),
+      skip: parseInt(offset || "0"),
     });
 
     return c.json(workouts);
   })
   // get workout by id
-  .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
-    const params = c.req.valid("param");
+  .get("/:id", async (c) => {
+    const { id } = c.req.param();
+    const userId = getUserId();
 
     const workout = await prisma.workout.findUnique({
       where: {
-        id: params.id,
+        id: id,
+        userId: userId,
       },
       include: {
         sets: {
@@ -108,22 +112,18 @@ const app = new Hono()
 
     return c.json(newWorkout);
   })
-  .get(
-    "/delete/:id",
-    zValidator("param", z.object({ id: z.string() })),
-    async (c) => {
-      const params = c.req.valid("param");
-      const userId = getUserId();
+  .delete("/:id", async (c) => {
+    const { id } = c.req.param();
+    const userId = getUserId();
 
-      const workout = await prisma.workout.delete({
-        where: {
-          id: params.id,
-          userId: userId,
-        },
-      });
+    const workout = await prisma.workout.delete({
+      where: {
+        id: id,
+        userId: userId,
+      },
+    });
 
-      return c.json(workout);
-    },
-  );
+    return c.json(workout);
+  });
 
 export default app;

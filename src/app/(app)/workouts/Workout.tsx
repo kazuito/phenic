@@ -20,7 +20,7 @@ const Workout = ({ workout }: Props) => {
   return (
     <Link
       href={`/workouts/${workout.id}`}
-      className="w-full rounded-lg border p-4"
+      className="block w-full rounded-lg border p-4"
     >
       <div className="flex items-center gap-1">
         <div className="">{dayjs(workout.date).format("MMM DD")}</div>・
