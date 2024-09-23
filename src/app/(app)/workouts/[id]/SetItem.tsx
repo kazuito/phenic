@@ -43,8 +43,8 @@ const SetItem = ({ indexOfSet, set, setSets, exercises, workoutId }: Props) => {
     <Dialog onOpenChange={(open) => setIsEditing(open && isEditing)}>
       <DialogTrigger asChild>
         <div className="-ml-1.5 flex w-full cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-0.5 has-[+button]:animate-fade-in-up">
-          <div className="mr-1 grid size-5 shrink-0 place-content-center rounded-md bg-black text-sm font-bold tracking-tighter text-white">
-            {indexOfSet + 1}
+          <div className="mr-1 grid size-5 shrink-0 place-content-center rounded-md bg-black font-serif text-sm font-bold tracking-tighter text-white">
+            {(indexOfSet + 1).toRoman()}
           </div>
           <div className="flex items-center gap-1">
             {set.exercise.type === ExerciseType.STRENGTH ? (

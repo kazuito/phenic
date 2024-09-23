@@ -57,3 +57,40 @@ export async function showErrorToast(
 ) {
   toast.error(await getErrorMessage(res));
 }
+
+const romanMap = new Map([
+  [1000, "M"],
+  [900, "CM"],
+  [500, "D"],
+  [400, "CD"],
+  [100, "C"],
+  [90, "XC"],
+  [50, "L"],
+  [40, "XL"],
+  [10, "X"],
+  [9, "IX"],
+  [5, "V"],
+  [4, "IV"],
+  [1, "I"],
+]);
+
+declare global {
+  interface Number {
+    toRoman: () => string;
+  }
+}
+
+Number.prototype.toRoman = function (): string {
+  let romanized = "";
+  let num = this as number;
+
+  romanMap.forEach((roman, key) => {
+    const q = (num / key) | 0;
+    if (q > 0) {
+      romanized += roman.repeat(q);
+      num -= key * q;
+    }
+  });
+
+  return romanized;
+};
