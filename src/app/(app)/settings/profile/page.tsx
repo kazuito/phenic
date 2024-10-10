@@ -28,7 +28,7 @@ const Page = async () => {
           className="mt-4"
           action={async () => {
             "use server";
-            await signOut({ redirectTo: "/signin" });
+            await signOut({ redirectTo: "/" });
           }}
         >
           <Button type="submit" variant="outline" className="w-full">
